@@ -240,14 +240,14 @@ export function ProductPage() {
           HERO — NextMerce-style grid
       ══════════════════════════════════════════════ */}
       <section className="border-b border-border/40 bg-muted/20 dark:bg-stone-950/40">
-        <div className="mx-auto flex min-h-[calc(100vh-3.5rem)] max-w-7xl flex-col px-4 py-5 sm:px-6 sm:py-6">
+        <div className="mx-auto flex max-w-7xl flex-col px-4 py-4 sm:px-6 sm:py-6 lg:min-h-[calc(100vh-3.5rem)]">
           {status === "loading" && <HeroSkeleton />}
 
           {status !== "loading" && heroMain && (
             <div className="grid flex-1 grid-cols-1 gap-4 lg:grid-cols-3 lg:min-h-0">
               <div
                 className={cn(
-                  "group relative h-[44vh] min-h-[22rem] cursor-pointer overflow-hidden rounded-2xl lg:col-span-2 lg:h-full",
+                  "group relative min-h-[26rem] cursor-pointer overflow-hidden rounded-2xl sm:min-h-[30rem] lg:col-span-2 lg:h-full lg:min-h-0",
                 )}
                 onClick={() => handleBuy(heroMain)}
                 role="button"
@@ -263,7 +263,7 @@ export function ProductPage() {
                 <div className="absolute inset-0 bg-linear-to-r from-stone-950/92 via-stone-950/55 to-stone-950/10" />
                 <div className="absolute inset-0 bg-linear-to-t from-stone-950/40 via-transparent to-transparent" />
 
-                <div className="relative z-10 flex h-full flex-col justify-between p-6 md:p-8">
+                <div className="relative z-10 flex h-full flex-col justify-between p-4 sm:p-6 md:p-8">
                   <div className="flex flex-wrap items-center gap-2">
                     <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-500/30 bg-amber-500/15 px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-amber-400 backdrop-blur-sm">
                       <span className="h-1.5 w-1.5 rounded-full bg-amber-400" />
@@ -278,25 +278,25 @@ export function ProductPage() {
                     <p className="mb-1.5 text-[11px] font-semibold uppercase tracking-widest text-amber-400/80">
                       {heroMain.origin} · Bolsa de {heroMain.weight}g
                     </p>
-                    <h2 className="mb-3 max-w-lg text-3xl font-extrabold leading-tight tracking-tight text-white sm:text-4xl lg:text-[42px]">
+                    <h2 className="mb-3 max-w-lg text-2xl font-extrabold leading-tight tracking-tight text-white sm:text-4xl lg:text-[42px]">
                       {heroMain.name}
                     </h2>
-                    <p className="mb-5 max-w-xl text-sm leading-relaxed text-white/65">
+                    <p className="mb-5 max-w-xl text-sm leading-relaxed text-white/70 sm:text-[15px]">
                       {heroMain.description}
                     </p>
 
-                    <div className="flex flex-wrap items-center gap-3">
+                    <div className="flex flex-col items-start gap-3 sm:flex-row sm:flex-wrap sm:items-center">
                       <Button
                         size="lg"
                         onClick={(e) => {
                           e.stopPropagation();
                           handleBuy(heroMain);
                         }}
-                        className="shadow-lg shadow-primary/25"
+                        className="w-full shadow-lg shadow-primary/25 sm:w-auto"
                       >
                         Pagar con tarjeta
                       </Button>
-                      <span className="rounded-xl border border-white/15 bg-white/10 px-4 py-2.5 text-sm font-bold text-white backdrop-blur-sm">
+                      <span className="w-full rounded-xl border border-white/15 bg-white/10 px-4 py-2.5 text-center text-sm font-bold text-white backdrop-blur-sm sm:w-auto sm:text-left">
                         {formatCOP(heroMain.price)}
                       </span>
                     </div>
@@ -304,7 +304,7 @@ export function ProductPage() {
                 </div>
               </div>
 
-              <div className="flex h-full flex-row gap-4 lg:min-h-0 lg:flex-col">
+              <div className="grid gap-4 sm:grid-cols-2 lg:min-h-0 lg:grid-cols-1">
                 {heroSides.map((product) => {
                   const badgeText =
                     product.stock <= 5
@@ -316,7 +316,7 @@ export function ProductPage() {
                   return (
                     <div
                       key={product.id}
-                      className="group relative min-h-40 flex-1 cursor-pointer overflow-hidden rounded-2xl lg:min-h-0"
+                      className="group relative min-h-44 cursor-pointer overflow-hidden rounded-2xl sm:min-h-48 lg:min-h-0"
                       onClick={() => handleBuy(product)}
                       role="button"
                       tabIndex={0}

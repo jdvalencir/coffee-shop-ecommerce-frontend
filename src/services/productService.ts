@@ -1,4 +1,5 @@
 import api, { USE_MOCK } from './api';
+import { resolveProductImage } from '@/lib/productImages';
 import { mockProducts } from '@/mock/products';
 import type { Product } from '@/types';
 
@@ -49,7 +50,7 @@ function normalizeProduct(product: ApiProduct): Product {
     description: product.description,
     price: product.price,
     stock: product.stock,
-    image: product.imageUrl ?? product.image ?? '',
+    image: resolveProductImage(product.name, product.imageUrl ?? product.image),
     roastLevel: normalizeRoastLevel(product.roastLevel),
     origin: product.origin ?? 'Origen no especificado',
     weight: product.weight ?? 340,
