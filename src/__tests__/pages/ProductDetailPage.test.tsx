@@ -69,8 +69,9 @@ describe('ProductDetailPage', () => {
       await screen.findByRole('heading', { name: 'Cafe de Origen 340g' }),
     ).toBeInTheDocument();
     expect(screen.getByText('Huila, Colombia')).toBeInTheDocument();
-    fireEvent.click(screen.getByRole('button', { name: /buy now/i }));
+    fireEvent.click(screen.getByRole('button', { name: /comprar ahora/i }));
     expect(screen.getByRole('dialog')).toBeInTheDocument();
-    expect(screen.getByText('Complete your order')).toBeInTheDocument();
+    expect(screen.getByText('Completa tu pedido')).toBeInTheDocument();
+    expect(screen.getByText('Pagar')).toBeInTheDocument();
   });
 });

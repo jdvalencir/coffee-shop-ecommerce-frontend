@@ -50,7 +50,7 @@ export function FinalStatus({ open }: FinalStatusProps) {
         message:
           polledStatus === 'approved'
             ? polledMessage
-            : polledMessage ?? 'The transaction could not be approved.',
+            : polledMessage ?? 'La transacción no pudo ser aprobada.',
       }),
     );
   }, [
@@ -100,10 +100,10 @@ export function FinalStatus({ open }: FinalStatusProps) {
           <div className="bg-linear-to-br from-background via-background to-primary/10 px-6 py-6">
             <DialogHeader>
               <DialogTitle className="text-left text-xl font-semibold">
-                Transaction Status
+                Estado de la transacción
               </DialogTitle>
               <DialogDescription className="text-left">
-                We are validating the final result of your coffee order.
+                Estamos validando el resultado final de tu pedido.
               </DialogDescription>
             </DialogHeader>
           </div>
@@ -115,16 +115,15 @@ export function FinalStatus({ open }: FinalStatusProps) {
                   <Loader2 className="h-10 w-10 animate-spin" />
                 </div>
                 <h2 className="text-xl font-semibold text-foreground">
-                  Payment in progress
+                  Pago en proceso
                 </h2>
                 <p className="mt-2 text-sm leading-6 text-muted-foreground">
-                  Your transaction is currently pending. We are checking the
-                  backend every 3 seconds until the payment gateway returns the
-                  final result.
+                  Tu transacción está pendiente. Estamos consultando el backend
+                  cada 3 segundos hasta que la pasarela devuelva el resultado final.
                 </p>
                 {paymentResult.transactionId ? (
                   <p className="mt-4 rounded-full bg-muted px-4 py-2 text-xs font-medium text-muted-foreground">
-                    Transaction ID: {paymentResult.transactionId}
+                    ID de transacción: {paymentResult.transactionId}
                   </p>
                 ) : null}
               </div>
@@ -136,15 +135,14 @@ export function FinalStatus({ open }: FinalStatusProps) {
                   <CheckCircle2 className="h-10 w-10" />
                 </div>
                 <h2 className="text-xl font-semibold text-foreground">
-                  Payment approved
+                  Pago aprobado
                 </h2>
                 <p className="mt-2 text-sm leading-6 text-muted-foreground">
-                  Your order was confirmed successfully and the inventory is
-                  ready to be refreshed.
+                  Tu pedido fue confirmado correctamente y el inventario ya puede actualizarse.
                 </p>
                 {paymentResult.transactionId ? (
                   <p className="mt-4 rounded-2xl border border-emerald-500/20 bg-emerald-500/5 px-4 py-3 text-sm font-medium text-foreground">
-                    Transaction ID: {paymentResult.transactionId}
+                    ID de transacción: {paymentResult.transactionId}
                   </p>
                 ) : null}
                 {resolvedMessage ? (
@@ -153,7 +151,7 @@ export function FinalStatus({ open }: FinalStatusProps) {
                   </p>
                 ) : null}
                 <p className="mt-3 text-xs text-muted-foreground">
-                  This confirmation will close automatically in 5 seconds.
+                  Esta confirmación se cerrará automáticamente en 5 segundos.
                 </p>
               </div>
             ) : null}
@@ -168,15 +166,15 @@ export function FinalStatus({ open }: FinalStatusProps) {
                   )}
                 </div>
                 <h2 className="text-xl font-semibold text-foreground">
-                  Payment failed
+                  El pago falló
                 </h2>
                 <p className="mt-2 text-sm leading-6 text-muted-foreground">
                   {resolvedMessage ??
-                    'The transaction was declined or could not be confirmed.'}
+                    'La transacción fue rechazada o no pudo confirmarse.'}
                 </p>
                 {paymentResult.transactionId ? (
                   <p className="mt-4 rounded-full bg-muted px-4 py-2 text-xs font-medium text-muted-foreground">
-                    Transaction ID: {paymentResult.transactionId}
+                    ID de transacción: {paymentResult.transactionId}
                   </p>
                 ) : null}
               </div>
@@ -190,7 +188,7 @@ export function FinalStatus({ open }: FinalStatusProps) {
                 onClick={handleBackToCatalog}
               >
                 <RefreshCcw className="h-4 w-4" />
-                Back to catalog
+                Volver al catálogo
               </Button>
             </div>
           </div>

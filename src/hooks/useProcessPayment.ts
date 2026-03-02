@@ -96,7 +96,7 @@ function extractGatewayError(payload: WompiTokenResponse) {
   return (
     payload.error?.reason ??
     payload.error?.message ??
-    "Card tokenization failed"
+    "Falló la tokenización de la tarjeta"
   );
 }
 
@@ -115,7 +115,7 @@ export function useProcessPayment() {
   async function processPayment() {
     if (!selectedProduct || !creditCard || !delivery) {
       const message =
-        "Missing checkout data. Please complete the previous step again.";
+        "Faltan datos del checkout. Completa nuevamente el paso anterior.";
       setError(message);
       setSuccess(null);
       dispatch(
@@ -136,7 +136,7 @@ export function useProcessPayment() {
 
     try {
       if (!PAYMENT_PUBLIC_KEY) {
-        throw new Error("Missing payment gateway public key.");
+        throw new Error("Falta la llave pública de la pasarela de pago.");
       }
 
       const [expMonth, expYearShort] = creditCard.expiry.split("/");
@@ -192,7 +192,7 @@ export function useProcessPayment() {
         throw new Error(
           transactionPayload.message ??
             transactionPayload.error ??
-            "The transaction was declined.",
+            "La transacción fue rechazada.",
         );
       }
 
@@ -215,7 +215,7 @@ export function useProcessPayment() {
           message:
             result.status === "approved"
               ? null
-              : "Your transaction is still being confirmed.",
+              : "Tu transacción todavía está siendo confirmada.",
         }),
       );
       dispatch(setStep("status"));
@@ -224,7 +224,7 @@ export function useProcessPayment() {
     } catch (caughtError) {
       const message = getErrorMessage(
         caughtError,
-        "We could not complete the payment. Please try again.",
+        "No pudimos completar el pago. Inténtalo de nuevo.",
       );
 
       setError(message);

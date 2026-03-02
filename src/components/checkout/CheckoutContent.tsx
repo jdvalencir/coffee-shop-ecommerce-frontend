@@ -185,10 +185,10 @@ export function CheckoutContent({ onSubmitSuccess }: CheckoutContentProps) {
       <section className="order-1 lg:col-span-3 lg:order-2">
         <div className="mb-5">
           <h1 className="text-xl font-semibold text-foreground sm:text-2xl">
-            Complete your order
+            Completa tu pedido
           </h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            Fill in your delivery and payment details below.
+            Ingresa abajo tus datos de entrega y pago.
           </p>
         </div>
 
@@ -201,12 +201,12 @@ export function CheckoutContent({ onSubmitSuccess }: CheckoutContentProps) {
               <TabsList className="mb-1 w-full">
                 <TabsTrigger value="delivery" className="flex-1">
                   <Package className="mr-1.5 h-3.5 w-3.5" />
-                  Delivery Info
+                  Entrega
                   {hasDeliveryErrors && <ErrorDot />}
                 </TabsTrigger>
                 <TabsTrigger value="payment" className="flex-1">
                   <Lock className="mr-1.5 h-3.5 w-3.5" />
-                  Payment
+                  Pago
                   {hasPaymentErrors && <ErrorDot />}
                 </TabsTrigger>
               </TabsList>
@@ -228,11 +228,10 @@ export function CheckoutContent({ onSubmitSuccess }: CheckoutContentProps) {
                 disabled={isSubmitting}
               >
                 <Lock className="h-4 w-4" />
-                {isSubmitting ? 'Processing…' : 'Review Payment Summary'}
+                {isSubmitting ? 'Procesando…' : 'Revisar resumen de pago'}
               </Button>
               <p className="mt-2 text-center text-xs text-muted-foreground">
-                By confirming you agree to proceed with a secure test
-                transaction.
+                Al confirmar, aceptas continuar con una transacción segura de prueba.
               </p>
             </div>
           </form>
@@ -242,7 +241,7 @@ export function CheckoutContent({ onSubmitSuccess }: CheckoutContentProps) {
       <aside className="order-2 lg:col-span-2 lg:order-1">
         <div className="rounded-2xl border border-border/50 bg-card p-5 shadow-sm">
           <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-muted-foreground">
-            Order Summary
+            Resumen del pedido
           </h2>
 
           <div className="flex gap-3">
@@ -262,7 +261,7 @@ export function CheckoutContent({ onSubmitSuccess }: CheckoutContentProps) {
               </p>
               <p className="mt-0.5 text-xs capitalize text-muted-foreground">
                 {selectedProduct.origin} ·{' '}
-                {selectedProduct.roastLevel.replace('-', ' ')} roast ·{' '}
+                tueste {selectedProduct.roastLevel.replace('-', ' ')} ·{' '}
                 {selectedProduct.weight}g
               </p>
               <p className="mt-1.5 text-sm font-bold text-primary">
@@ -274,17 +273,17 @@ export function CheckoutContent({ onSubmitSuccess }: CheckoutContentProps) {
           <Separator className="my-4" />
 
           <div className="space-y-2.5">
-            <PriceRow label="Product amount" value={selectedProduct.price} />
-            <PriceRow label="Base fee" value={BASE_FEE_COP} />
-            <PriceRow label="Delivery Fee" value={DELIVERY_FEE_COP} />
+            <PriceRow label="Producto" value={selectedProduct.price} />
+            <PriceRow label="Tarifa base" value={BASE_FEE_COP} />
+            <PriceRow label="Envío" value={DELIVERY_FEE_COP} />
             <Separator className="my-1" />
-            <PriceRow label="Total amount" value={total} bold />
+            <PriceRow label="Total" value={total} bold />
           </div>
 
           <div className="mt-4 flex items-center gap-2 rounded-lg bg-muted/50 px-3 py-2.5">
             <Lock className="h-3.5 w-3.5 flex-shrink-0 text-muted-foreground" />
             <p className="text-xs text-muted-foreground">
-              Secure payment processing in test mode
+              Procesamiento de pago seguro en modo de prueba
             </p>
           </div>
         </div>

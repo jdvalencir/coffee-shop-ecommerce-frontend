@@ -43,11 +43,11 @@ type FilterId = "all" | RoastLevel;
 // ── Constants ─────────────────────────────────────────────────────────────────
 
 const FILTERS: { id: FilterId; label: string }[] = [
-  { id: "all", label: "All Roasts" },
-  { id: "light", label: "Light" },
-  { id: "medium", label: "Medium" },
-  { id: "medium-dark", label: "Medium Dark" },
-  { id: "dark", label: "Dark" },
+  { id: "all", label: "Todos" },
+  { id: "light", label: "Claro" },
+  { id: "medium", label: "Medio" },
+  { id: "medium-dark", label: "Medio Oscuro" },
+  { id: "dark", label: "Oscuro" },
 ];
 
 interface TrustBadge {
@@ -57,21 +57,21 @@ interface TrustBadge {
 }
 
 const TRUST_BADGES: TrustBadge[] = [
-  { icon: Flame, title: "Small Batch Roasted", sub: "Fresh weekly batches" },
-  { icon: Leaf, title: "100% Single Origin", sub: "6 premium growing regions" },
+  { icon: Flame, title: "Tostado en lotes pequeños", sub: "Lotes frescos cada semana" },
+  { icon: Leaf, title: "100% origen único", sub: "6 regiones cafeteras premium" },
   {
     icon: ShieldCheck,
-    title: "Secure Payments",
-    sub: "Encrypted and gateway-ready",
+    title: "Pagos seguros",
+    sub: "Encriptados y listos para la pasarela",
   },
-  { icon: Truck, title: "Fast Delivery", sub: "1 – 3 business days" },
+  { icon: Truck, title: "Entrega rápida", sub: "1 a 3 días hábiles" },
 ];
 
 const ROAST_LABELS: Record<RoastLevel, string> = {
-  light: "Light Roast",
-  medium: "Medium Roast",
-  "medium-dark": "Medium Dark",
-  dark: "Dark Roast",
+  light: "Tueste Claro",
+  medium: "Tueste Medio",
+  "medium-dark": "Tueste Medio Oscuro",
+  dark: "Tueste Oscuro",
 };
 
 // ── Sub-components ────────────────────────────────────────────────────────────
@@ -186,10 +186,9 @@ export function ProductPage() {
       >
         <DialogContent className="max-h-[90vh] max-w-5xl overflow-y-auto border-border/50 bg-background p-0">
           <DialogHeader className="border-b border-border/40 pr-12">
-            <DialogTitle>Checkout</DialogTitle>
+            <DialogTitle>Pagar</DialogTitle>
             <DialogDescription>
-              Confirm your delivery details and payment without leaving the
-              catalog.
+              Confirma tus datos de entrega y pago sin salir del catálogo.
             </DialogDescription>
           </DialogHeader>
           <div className="p-4 sm:p-6">
@@ -216,7 +215,7 @@ export function ProductPage() {
               <Coffee className="h-4 w-4 text-primary-foreground" />
             </div>
             <span className="text-base font-bold tracking-tight text-foreground">
-              Brews &amp; Beans
+              Hispania Coffee
             </span>
           </div>
 
@@ -225,7 +224,7 @@ export function ProductPage() {
             size="icon"
             onClick={toggleTheme}
             aria-label={
-              theme === "dark" ? "Switch to light mode" : "Switch to dark mode"
+              theme === "dark" ? "Cambiar a modo claro" : "Cambiar a modo oscuro"
             }
           >
             {theme === "dark" ? (
@@ -254,11 +253,11 @@ export function ProductPage() {
                 role="button"
                 tabIndex={0}
                 onKeyDown={(e) => e.key === "Enter" && handleBuy(heroMain)}
-                aria-label={`Buy ${heroMain.name}`}
+                aria-label={`Comprar ${heroMain.name}`}
               >
                 <img
                   src={heroMain.image}
-                  alt={`${heroMain.name} coffee`}
+                  alt={`${heroMain.name} cafe`}
                   className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                 />
                 <div className="absolute inset-0 bg-linear-to-r from-stone-950/92 via-stone-950/55 to-stone-950/10" />
@@ -268,7 +267,7 @@ export function ProductPage() {
                   <div className="flex flex-wrap items-center gap-2">
                     <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-500/30 bg-amber-500/15 px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-amber-400 backdrop-blur-sm">
                       <span className="h-1.5 w-1.5 rounded-full bg-amber-400" />
-                      Featured in Catalog
+                      Destacado del catálogo
                     </span>
                     <span className="rounded-full border border-white/10 bg-white/10 px-3 py-1 text-[11px] font-medium text-white/70 backdrop-blur-sm">
                       {ROAST_LABELS[heroMain.roastLevel]}
@@ -277,7 +276,7 @@ export function ProductPage() {
 
                   <div>
                     <p className="mb-1.5 text-[11px] font-semibold uppercase tracking-widest text-amber-400/80">
-                      {heroMain.origin} · {heroMain.weight}g Bag
+                      {heroMain.origin} · Bolsa de {heroMain.weight}g
                     </p>
                     <h2 className="mb-3 max-w-lg text-3xl font-extrabold leading-tight tracking-tight text-white sm:text-4xl lg:text-[42px]">
                       {heroMain.name}
@@ -295,7 +294,7 @@ export function ProductPage() {
                         }}
                         className="shadow-lg shadow-primary/25"
                       >
-                        Pay with Credit Card
+                        Pagar con tarjeta
                       </Button>
                       <span className="rounded-xl border border-white/15 bg-white/10 px-4 py-2.5 text-sm font-bold text-white backdrop-blur-sm">
                         {formatCOP(heroMain.price)}
@@ -309,10 +308,10 @@ export function ProductPage() {
                 {heroSides.map((product) => {
                   const badgeText =
                     product.stock <= 5
-                      ? `Only ${product.stock} left`
+                      ? `Solo quedan ${product.stock}`
                       : product.roastLevel === "medium"
-                        ? "Bestseller"
-                        : "Fresh Pick";
+                        ? "Más vendido"
+                        : "Selección fresca";
 
                   return (
                     <div
@@ -322,11 +321,11 @@ export function ProductPage() {
                       role="button"
                       tabIndex={0}
                       onKeyDown={(e) => e.key === "Enter" && handleBuy(product)}
-                      aria-label={`Buy ${product.name}`}
+                      aria-label={`Comprar ${product.name}`}
                     >
                       <img
                         src={product.image}
-                        alt={`${product.name} coffee`}
+                        alt={`${product.name} cafe`}
                         className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
                       />
                       <div className="absolute inset-0 bg-linear-to-t from-stone-950/88 via-stone-950/30 to-transparent" />
@@ -400,11 +399,11 @@ export function ProductPage() {
         <div className="mb-5 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h2 className="text-xl font-semibold text-foreground">
-              Our Collection
+              Nuestra colección
             </h2>
             {status === "succeeded" && (
               <p className="text-sm text-muted-foreground">
-                {filtered.length} of {products.length} products
+                {filtered.length} de {products.length} productos
               </p>
             )}
           </div>
@@ -414,7 +413,7 @@ export function ProductPage() {
             <Search className="absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
             <input
               type="search"
-              placeholder="Search by name, origin, notes…"
+              placeholder="Buscar por nombre, origen o notas…"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className={cn(
@@ -458,7 +457,7 @@ export function ProductPage() {
           <div className="flex flex-col items-center justify-center gap-3 py-20 text-center">
             <Coffee className="h-10 w-10 text-muted-foreground/40" />
             <p className="font-medium text-foreground">
-              Couldn&apos;t load products
+              No se pudieron cargar los productos
             </p>
             <p className="max-w-xs text-sm text-muted-foreground">{error}</p>
             <Button
@@ -466,7 +465,7 @@ export function ProductPage() {
               size="sm"
               onClick={() => dispatch(fetchProducts())}
             >
-              Try again
+              Reintentar
             </Button>
           </div>
         )}
@@ -474,9 +473,9 @@ export function ProductPage() {
         {status === "succeeded" && filtered.length === 0 && (
           <div className="flex flex-col items-center justify-center gap-3 py-20 text-center">
             <Search className="h-10 w-10 text-muted-foreground/40" />
-            <p className="font-medium text-foreground">No products found</p>
+            <p className="font-medium text-foreground">No se encontraron productos</p>
             <p className="text-sm text-muted-foreground">
-              Try a different filter or search term
+              Prueba con otro filtro o término de búsqueda
             </p>
             <Button
               variant="ghost"
@@ -486,7 +485,7 @@ export function ProductPage() {
                 setSearch("");
               }}
             >
-              Clear filters
+              Limpiar filtros
             </Button>
           </div>
         )}
@@ -510,7 +509,7 @@ export function ProductPage() {
       <footer className="mt-16 border-t border-border/40 py-8 text-center">
         <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
           <Coffee className="h-4 w-4" />
-          <span>© 2024 Brews &amp; Beans. All rights reserved.</span>
+          <span>© 2024 Hispania Coffee. Todos los derechos reservados.</span>
         </div>
       </footer>
       </div>

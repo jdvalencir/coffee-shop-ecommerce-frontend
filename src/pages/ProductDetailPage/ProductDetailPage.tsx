@@ -43,22 +43,22 @@ const ROAST_CONFIG: Record<
   { label: string; accent: string; badge: string }
 > = {
   light: {
-    label: 'Light Roast',
+    label: 'Tueste Claro',
     accent: 'from-amber-200/70 via-orange-200/30 to-transparent',
     badge: 'border-amber-300/60 bg-amber-100/80 text-amber-900',
   },
   medium: {
-    label: 'Medium Roast',
+    label: 'Tueste Medio',
     accent: 'from-orange-300/70 via-orange-200/30 to-transparent',
     badge: 'border-orange-300/60 bg-orange-100/80 text-orange-900',
   },
   'medium-dark': {
-    label: 'Medium Dark',
+    label: 'Tueste Medio Oscuro',
     accent: 'from-rose-300/60 via-orange-200/20 to-transparent',
     badge: 'border-rose-300/60 bg-rose-100/80 text-rose-900',
   },
   dark: {
-    label: 'Dark Roast',
+    label: 'Tueste Oscuro',
     accent: 'from-stone-700/50 via-stone-500/20 to-transparent',
     badge: 'border-stone-500/40 bg-stone-900/80 text-stone-100',
   },
@@ -184,10 +184,9 @@ export function ProductDetailPage() {
       >
         <DialogContent className="max-h-[90vh] max-w-5xl overflow-y-auto border-border/50 bg-background p-0">
           <DialogHeader className="border-b border-border/40 pr-12">
-            <DialogTitle>Checkout</DialogTitle>
+            <DialogTitle>Pagar</DialogTitle>
             <DialogDescription>
-              Confirm your delivery details and payment without leaving the
-              product view.
+              Confirma tus datos de entrega y pago sin salir de la vista del producto.
             </DialogDescription>
           </DialogHeader>
           <div className="p-4 sm:p-6">
@@ -208,7 +207,7 @@ export function ProductDetailPage() {
           <Button asChild variant="ghost" size="sm" className="gap-1.5">
             <Link to="/">
               <ArrowLeft className="h-4 w-4" />
-              <span className="hidden sm:inline">Back to catalog</span>
+              <span className="hidden sm:inline">Volver al catálogo</span>
             </Link>
           </Button>
 
@@ -217,7 +216,7 @@ export function ProductDetailPage() {
               <Coffee className="h-4 w-4 text-primary-foreground" />
             </div>
             <span className="text-base font-bold tracking-tight text-foreground">
-              Brews &amp; Beans
+              Hispania Coffee
             </span>
           </div>
 
@@ -226,7 +225,7 @@ export function ProductDetailPage() {
             size="icon"
             onClick={toggleTheme}
             aria-label={
-              theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'
+              theme === 'dark' ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'
             }
           >
             {theme === 'dark' ? (
@@ -244,22 +243,22 @@ export function ProductDetailPage() {
         <main className="mx-auto max-w-3xl px-4 py-12 text-center sm:px-6">
           <div className="rounded-3xl border border-destructive/20 bg-destructive/5 p-8">
             <p className="text-sm font-semibold uppercase tracking-[0.22em] text-destructive">
-              Product unavailable
+              Producto no disponible
             </p>
             <h1 className="mt-3 text-3xl font-semibold tracking-tight text-foreground">
-              We couldn&apos;t load this coffee.
+              No pudimos cargar este café.
             </h1>
             <p className="mt-3 text-sm leading-6 text-muted-foreground">
               {hasMissingId
                 ? 'No se recibió un identificador de producto.'
                 : error?.message ??
-                  'Try again in a moment or go back to the catalog.'}
+                  'Inténtalo de nuevo en un momento o vuelve al catálogo.'}
             </p>
             <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
               <Button asChild variant="outline">
-                <Link to="/">Return to catalog</Link>
+                <Link to="/">Volver al catálogo</Link>
               </Button>
-              <Button onClick={() => window.location.reload()}>Retry</Button>
+              <Button onClick={() => window.location.reload()}>Reintentar</Button>
             </div>
           </div>
         </main>
@@ -290,7 +289,7 @@ export function ProductDetailPage() {
                 <div className="rounded-2xl border border-border/50 bg-card p-4">
                   <div className="flex items-center gap-2 text-xs uppercase tracking-[0.22em] text-muted-foreground">
                     <MapPin className="h-3.5 w-3.5" />
-                    Origin
+                    Origen
                   </div>
                   <p className="mt-2 text-sm font-semibold text-foreground">
                     {product.origin}
@@ -299,7 +298,7 @@ export function ProductDetailPage() {
                 <div className="rounded-2xl border border-border/50 bg-card p-4">
                   <div className="flex items-center gap-2 text-xs uppercase tracking-[0.22em] text-muted-foreground">
                     <Package className="h-3.5 w-3.5" />
-                    Weight
+                    Peso
                   </div>
                   <p className="mt-2 text-sm font-semibold text-foreground">
                     {product.weight}g
@@ -308,7 +307,7 @@ export function ProductDetailPage() {
                 <div className="rounded-2xl border border-border/50 bg-card p-4">
                   <div className="flex items-center gap-2 text-xs uppercase tracking-[0.22em] text-muted-foreground">
                     <Leaf className="h-3.5 w-3.5" />
-                    Profile
+                    Perfil
                   </div>
                   <p className="mt-2 text-sm font-semibold text-foreground">
                     {roast.label}
@@ -318,7 +317,7 @@ export function ProductDetailPage() {
 
               <section className="rounded-3xl border border-border/50 bg-card p-6 shadow-sm">
                 <p className="text-xs font-semibold uppercase tracking-[0.24em] text-muted-foreground">
-                  Tasting notes
+                  Notas de cata
                 </p>
                 <div className="mt-4 flex flex-wrap gap-2">
                   {product.notes.length > 0 ? (
@@ -329,7 +328,7 @@ export function ProductDetailPage() {
                     ))
                   ) : (
                     <p className="text-sm text-muted-foreground">
-                      This product does not include tasting notes yet.
+                      Este producto todavía no tiene notas de cata.
                     </p>
                   )}
                 </div>
@@ -345,7 +344,7 @@ export function ProductDetailPage() {
                     </Badge>
                     {createdAtLabel && (
                       <Badge variant="secondary" className="px-3 py-1">
-                        Added {createdAtLabel}
+                        Agregado {createdAtLabel}
                       </Badge>
                     )}
                   </div>
@@ -361,19 +360,19 @@ export function ProductDetailPage() {
                 <div className="space-y-5 p-6">
                   <div className="rounded-2xl bg-muted/50 p-5">
                     <p className="text-xs font-semibold uppercase tracking-[0.24em] text-muted-foreground">
-                      Price
+                      Precio
                     </p>
                     <p className="mt-2 text-4xl font-semibold tracking-tight text-primary">
                       {formatCOP(product.price)}
                     </p>
                     <p className="mt-2 text-sm text-muted-foreground">
-                      Secure checkout with local delivery in Colombia.
+                      Pago seguro con entrega local en Colombia.
                     </p>
                   </div>
 
                   <div className="space-y-3 rounded-2xl border border-border/50 p-4">
                     <div className="flex items-center justify-between text-sm">
-                      <span className="text-muted-foreground">Inventory</span>
+                      <span className="text-muted-foreground">Inventario</span>
                       <span
                         className={cn(
                           'font-semibold',
@@ -385,22 +384,22 @@ export function ProductDetailPage() {
                         )}
                       >
                         {isOutOfStock
-                          ? 'Out of stock'
+                          ? 'Agotado'
                           : isLowStock
-                            ? `Only ${product.stock} left`
-                            : `${product.stock} available`}
+                            ? `Solo quedan ${product.stock}`
+                            : `${product.stock} disponibles`}
                       </span>
                     </div>
                     <div className="flex items-center justify-between text-sm">
-                      <span className="text-muted-foreground">Shipping</span>
+                      <span className="text-muted-foreground">Envío</span>
                       <span className="font-semibold text-foreground">
-                        1 to 3 business days
+                        1 a 3 días hábiles
                       </span>
                     </div>
                     <div className="flex items-center justify-between text-sm">
-                      <span className="text-muted-foreground">Payments</span>
+                      <span className="text-muted-foreground">Pago</span>
                       <span className="font-semibold text-foreground">
-                        Credit card
+                        Tarjeta
                       </span>
                     </div>
                   </div>
@@ -411,26 +410,26 @@ export function ProductDetailPage() {
                     onClick={handleBuy}
                     disabled={isOutOfStock}
                   >
-                    {isOutOfStock ? 'Out of Stock' : 'Buy Now'}
+                    {isOutOfStock ? 'Agotado' : 'Comprar ahora'}
                   </Button>
 
                   <div className="grid gap-3 sm:grid-cols-2">
                     <div className="rounded-2xl border border-border/50 p-4">
                       <div className="flex items-center gap-2 text-sm font-medium text-foreground">
                         <ShieldCheck className="h-4 w-4 text-primary" />
-                        Protected payment
+                        Pago protegido
                       </div>
                       <p className="mt-2 text-xs leading-5 text-muted-foreground">
-                        Checkout data is encrypted and processed through the payment flow.
+                        Los datos del checkout se encriptan y se procesan dentro del flujo de pago.
                       </p>
                     </div>
                     <div className="rounded-2xl border border-border/50 p-4">
                       <div className="flex items-center gap-2 text-sm font-medium text-foreground">
                         <Truck className="h-4 w-4 text-primary" />
-                        Fast dispatch
+                        Despacho rápido
                       </div>
                       <p className="mt-2 text-xs leading-5 text-muted-foreground">
-                        Fresh roasted batches are prepared for quick local fulfillment.
+                        Los lotes recién tostados se preparan para una entrega local rápida.
                       </p>
                     </div>
                   </div>

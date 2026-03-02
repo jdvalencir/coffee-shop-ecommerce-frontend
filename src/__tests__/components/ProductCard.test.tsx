@@ -71,82 +71,81 @@ describe('ProductCard', () => {
 
   // ── Roast level labels ────────────────────────────────────────────────────────
 
-  it('shows "Light Roast" pill for light roast level', () => {
+  it('shows "Tueste Claro" pill for light roast level', () => {
     renderCard();
-    expect(screen.getByText('Light Roast')).toBeInTheDocument();
+    expect(screen.getByText('Tueste Claro')).toBeInTheDocument();
   });
 
-  it('shows "Medium Roast" pill for medium roast level', () => {
+  it('shows "Tueste Medio" pill for medium roast level', () => {
     renderCard({ ...baseProduct, roastLevel: 'medium' });
-    expect(screen.getByText('Medium Roast')).toBeInTheDocument();
+    expect(screen.getByText('Tueste Medio')).toBeInTheDocument();
   });
 
-  it('shows "Medium Dark" pill for medium-dark roast level', () => {
+  it('shows "Tueste Medio Oscuro" pill for medium-dark roast level', () => {
     renderCard({ ...baseProduct, roastLevel: 'medium-dark' });
-    expect(screen.getByText('Medium Dark')).toBeInTheDocument();
+    expect(screen.getByText('Tueste Medio Oscuro')).toBeInTheDocument();
   });
 
-  it('shows "Dark Roast" pill for dark roast level', () => {
+  it('shows "Tueste Oscuro" pill for dark roast level', () => {
     renderCard({ ...baseProduct, roastLevel: 'dark' });
-    expect(screen.getByText('Dark Roast')).toBeInTheDocument();
+    expect(screen.getByText('Tueste Oscuro')).toBeInTheDocument();
   });
 
   // ── Stock states ──────────────────────────────────────────────────────────────
 
   it('shows stock count text when stock is above 5', () => {
     renderCard();
-    expect(screen.getByText('15 in stock')).toBeInTheDocument();
+    expect(screen.getByText('15 disponibles')).toBeInTheDocument();
   });
 
-  it('shows "Only X left" badge when stock is between 1 and 5', () => {
+  it('shows "Solo quedan X" badge when stock is between 1 and 5', () => {
     renderCard({ ...baseProduct, stock: 3 });
-    expect(screen.getByText('Only 3 left')).toBeInTheDocument();
+    expect(screen.getByText('Solo quedan 3')).toBeInTheDocument();
   });
 
-  it('shows "Only 5 left" at the boundary (stock = 5)', () => {
+  it('shows "Solo quedan 5" at the boundary (stock = 5)', () => {
     renderCard({ ...baseProduct, stock: 5 });
-    expect(screen.getByText('Only 5 left')).toBeInTheDocument();
+    expect(screen.getByText('Solo quedan 5')).toBeInTheDocument();
   });
 
-  it('shows "Out of Stock" overlay when stock is 0', () => {
+  it('shows "Agotado" overlay when stock is 0', () => {
     renderCard({ ...baseProduct, stock: 0 });
-    // "Out of Stock" appears in both the overlay span and the disabled button
-    const allOutOfStock = screen.getAllByText('Out of Stock');
+    const allOutOfStock = screen.getAllByText('Agotado');
     expect(allOutOfStock.length).toBeGreaterThanOrEqual(1);
     expect(allOutOfStock[0]).toBeInTheDocument();
   });
 
   it('disables the button when stock is 0', () => {
     renderCard({ ...baseProduct, stock: 0 });
-    const button = screen.getByRole('button', { name: /out of stock/i });
+    const button = screen.getByRole('button', { name: /agotado/i });
     expect(button).toBeDisabled();
   });
 
   // ── CTA button behaviour ──────────────────────────────────────────────────────
 
-  it('renders "Pay with Credit Card" button when product is in stock', () => {
+  it('renders "Pagar con tarjeta" button when product is in stock', () => {
     renderCard();
     expect(
-      screen.getByRole('button', { name: /pay with credit card/i }),
+      screen.getByRole('button', { name: /pagar con tarjeta/i }),
     ).toBeInTheDocument();
   });
 
   it('calls onBuy with the product when the button is clicked', () => {
     renderCard();
-    fireEvent.click(screen.getByRole('button', { name: /pay with credit card/i }));
+    fireEvent.click(screen.getByRole('button', { name: /pagar con tarjeta/i }));
     expect(onBuy).toHaveBeenCalledTimes(1);
     expect(onBuy).toHaveBeenCalledWith(baseProduct);
   });
 
   it('does not call onBuy when the product is out of stock', () => {
     renderCard({ ...baseProduct, stock: 0 });
-    fireEvent.click(screen.getByRole('button', { name: /out of stock/i }));
+    fireEvent.click(screen.getByRole('button', { name: /agotado/i }));
     expect(onBuy).not.toHaveBeenCalled();
   });
 
   it('does not show stock count text when stock is low (1–5)', () => {
     renderCard({ ...baseProduct, stock: 2 });
     // "X in stock" text should not appear — only the "Only X left" badge
-    expect(screen.queryByText('2 in stock')).not.toBeInTheDocument();
+    expect(screen.queryByText('2 disponibles')).not.toBeInTheDocument();
   });
 });

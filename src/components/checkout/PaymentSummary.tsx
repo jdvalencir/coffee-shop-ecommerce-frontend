@@ -60,11 +60,11 @@ export function PaymentSummary({ open, onOpenChange }: PaymentSummaryProps) {
           <div className="bg-linear-to-br from-primary/12 via-background to-amber-500/10 px-5 py-5 sm:px-6">
             <DialogHeader>
               <DialogTitle className="text-left text-xl font-semibold">
-                Payment Summary
+                Resumen de pago
               </DialogTitle>
               <DialogDescription className="text-left text-sm leading-6">
-                Review the final breakdown before tokenizing the card and
-                sending the secure transaction to your backend.
+                Revisa el desglose final antes de tokenizar la tarjeta y
+                enviar la transacción segura a tu backend.
               </DialogDescription>
             </DialogHeader>
           </div>
@@ -87,7 +87,7 @@ export function PaymentSummary({ open, onOpenChange }: PaymentSummaryProps) {
                     {selectedProduct.origin} · {selectedProduct.weight}g
                   </p>
                   <p className="mt-2 text-xs font-medium uppercase tracking-[0.18em] text-primary">
-                    Ready for final charge
+                    Listo para el cobro final
                   </p>
                 </div>
               </div>
@@ -95,11 +95,11 @@ export function PaymentSummary({ open, onOpenChange }: PaymentSummaryProps) {
 
             <div className="rounded-2xl border border-border/60 bg-card p-4">
               <div className="space-y-3">
-                <SummaryRow label="Product amount" value={selectedProduct.price} />
-                <SummaryRow label="Base fee" value={BASE_FEE_COP} />
-                <SummaryRow label="Delivery Fee" value={DELIVERY_FEE_COP} />
+                <SummaryRow label="Producto" value={selectedProduct.price} />
+                <SummaryRow label="Tarifa base" value={BASE_FEE_COP} />
+                <SummaryRow label="Envío" value={DELIVERY_FEE_COP} />
                 <Separator />
-                <SummaryRow label="Total amount" value={total} emphasis />
+                <SummaryRow label="Total" value={total} emphasis />
               </div>
             </div>
 
@@ -107,10 +107,10 @@ export function PaymentSummary({ open, onOpenChange }: PaymentSummaryProps) {
               <div className="rounded-2xl border border-border/60 bg-muted/30 p-4">
                 <div className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
                   <CreditCard className="h-3.5 w-3.5" />
-                  Payment method
+                  Método de pago
                 </div>
                 <p className="text-sm font-semibold text-foreground">
-                  Card ending in {cardLastFour}
+                  Tarjeta terminada en {cardLastFour}
                 </p>
                 <p className="mt-1 text-xs text-muted-foreground">
                   {creditCard.holderName}
@@ -120,7 +120,7 @@ export function PaymentSummary({ open, onOpenChange }: PaymentSummaryProps) {
               <div className="rounded-2xl border border-border/60 bg-muted/30 p-4">
                 <div className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
                   <MapPin className="h-3.5 w-3.5" />
-                  Delivery
+                  Entrega
                 </div>
                 <p className="text-sm font-semibold text-foreground">
                   {delivery.city}, {delivery.department}
@@ -142,8 +142,8 @@ export function PaymentSummary({ open, onOpenChange }: PaymentSummaryProps) {
               <div className="flex items-start gap-2.5">
                 <ShieldCheck className="mt-0.5 h-4 w-4 flex-shrink-0 text-primary" />
                 <p className="text-xs leading-5 text-muted-foreground">
-                  The final action tokenizes the card first, then posts only
-                  the token plus order data to your local transaction endpoint.
+                  La acción final tokeniza primero la tarjeta y luego envía
+                  solo el token junto con los datos del pedido a tu endpoint local.
                 </p>
               </div>
             </div>
@@ -158,7 +158,7 @@ export function PaymentSummary({ open, onOpenChange }: PaymentSummaryProps) {
               }}
             >
               {isProcessing ? <Loader2 className="h-4 w-4 animate-spin" /> : <ShieldCheck className="h-4 w-4" />}
-              {isProcessing ? 'Processing secure payment…' : 'Confirm & Pay'}
+              {isProcessing ? 'Procesando pago seguro…' : 'Confirmar y pagar'}
             </Button>
           </div>
         </div>

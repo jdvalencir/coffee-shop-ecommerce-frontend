@@ -1,4 +1,4 @@
-# Brews & Beans — Coffee Shop E-commerce Frontend
+# Hispania Coffee — Coffee Shop E-commerce Frontend
 
 A single-page application built for the Wompi FullStack test. Users can browse specialty coffee products and complete a purchase via Wompi's payment gateway (sandbox).
 

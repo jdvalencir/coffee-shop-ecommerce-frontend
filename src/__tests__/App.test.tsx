@@ -41,7 +41,7 @@ describe('App', () => {
       render(<App />);
     });
     // ProductPage renders the brand name in the header
-    expect(screen.getByText('Brews & Beans')).toBeInTheDocument();
+    expect(screen.getByText('Hispania Coffee')).toBeInTheDocument();
   });
 
   it('renders a theme toggle button', async () => {
@@ -49,7 +49,7 @@ describe('App', () => {
       render(<App />);
     });
     expect(
-      screen.getByRole('button', { name: /switch to dark mode/i }),
+      screen.getByRole('button', { name: /cambiar a modo oscuro/i }),
     ).toBeInTheDocument();
   });
 });
