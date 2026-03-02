@@ -2,6 +2,9 @@
 
 Frontend e-commerce para una tienda de café de especialidad. La app permite explorar el catálogo, ver el detalle de cada producto y completar una compra con checkout integrado y pago conectado a Wompi en entorno sandbox.
 
+<img width="1902" height="940" alt="image" src="https://github.com/user-attachments/assets/877e10a8-76cb-428e-8c07-af5e6591931e" />
+
+
 ## Información de la app
 
 ### Qué hace
@@ -42,23 +45,22 @@ Usa esta sección para dejar evidencia visual de la app funcionando. Reemplaza l
 
 ### Catálogo principal
 
-<!-- Reemplazar con screenshot del catálogo -->
-![Catálogo principal](docs/images/catalogo-principal.png)
+<img width="1908" height="894" alt="image" src="https://github.com/user-attachments/assets/546f00bb-acea-483e-a62f-6707697f39c7" />
 
 ### Detalle de producto
 
-<!-- Reemplazar con screenshot del detalle -->
-![Detalle de producto](docs/images/detalle-producto.png)
+<img width="1901" height="926" alt="image" src="https://github.com/user-attachments/assets/0a3213f3-be74-4f94-90b7-0f8ad8757571" />
 
 ### Checkout y resumen
 
-<!-- Reemplazar con screenshot del checkout -->
-![Checkout](docs/images/checkout.png)
+<img width="1917" height="938" alt="image" src="https://github.com/user-attachments/assets/a65453c3-8053-4c49-9214-3079bb69e601" />
+
 
 ### Estado final de la compra
+<img width="1902" height="944" alt="image" src="https://github.com/user-attachments/assets/464c0bc2-6e45-4173-985d-c247532599f1" />
 
-<!-- Reemplazar con screenshot del resultado -->
-![Resultado de la compra](docs/images/estado-final.png)
+<img width="1903" height="943" alt="image" src="https://github.com/user-attachments/assets/2864246c-32c3-4c91-9919-a3352334bb05" />
+
 
 ## Cómo correr la app
 
@@ -150,13 +152,7 @@ pnpm test:coverage
 | `store/slices` | 95.00% | 80.00% | 100.00% | 97.29% |
 | `utils` | 94.11% | 94.11% | 100.00% | 98.07% |
 
-### Resultado del suite
-
-| Dato | Valor |
-|---|---:|
-| Test Suites | 16 |
-| Tests | 174 |
-| Snapshots | 0 |
+<img width="917" height="874" alt="image" src="https://github.com/user-attachments/assets/a99e48e6-c202-4bda-b88d-c6706b3e1689" />
 
 ## GitHub Actions
 
