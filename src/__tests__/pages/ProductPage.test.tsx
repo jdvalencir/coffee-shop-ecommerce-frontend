@@ -13,12 +13,6 @@ jest.mock('@/services/productService', () => ({
   getProducts: jest.fn().mockResolvedValue([]),
 }));
 
-const mockNavigate = jest.fn();
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useNavigate: () => mockNavigate,
-}));
-
 type ProductsStatus = 'idle' | 'loading' | 'succeeded' | 'failed';
 
 function renderPage(status: ProductsStatus = 'succeeded', error: string | null = null) {
@@ -45,7 +39,6 @@ function getCatalog() {
 
 describe('ProductPage', () => {
   beforeEach(() => {
-    mockNavigate.mockClear();
     localStorage.clear();
   });
 
@@ -56,13 +49,15 @@ describe('ProductPage', () => {
 
   it('renders the dark/light mode toggle button', () => {
     renderPage();
-    expect(screen.getByRole('button', { name: /switch to dark mode/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /switch to (dark|light) mode/i })).toBeInTheDocument();
   });
 
   it('toggles the theme when the toggle button is clicked', () => {
     renderPage();
-    fireEvent.click(screen.getByRole('button', { name: /switch to dark mode/i }));
-    expect(screen.getByRole('button', { name: /switch to light mode/i })).toBeInTheDocument();
+    const toggle = screen.getByRole('button', { name: /switch to (dark|light) mode/i });
+    const nextMode = /dark mode/i.test(toggle.getAttribute('aria-label') ?? '') ? /light mode/i : /dark mode/i;
+    fireEvent.click(toggle);
+    expect(screen.getByRole('button', { name: nextMode })).toBeInTheDocument();
   });
 
   it('renders product cards in the catalog when status is "succeeded"', () => {
@@ -172,29 +167,30 @@ describe('ProductPage', () => {
     expect(within(getCatalog()).getByText('Ethiopian Yirgacheffe')).toBeInTheDocument();
   });
 
-  it('navigates to /checkout when a catalog product card buy button is clicked', () => {
+  it('opens the checkout modal when a catalog product card buy button is clicked', () => {
     renderPage();
     const buyButtons = within(getCatalog()).getAllByRole('button', { name: /pay with credit card/i });
     fireEvent.click(buyButtons[0]);
-    expect(mockNavigate).toHaveBeenCalledWith('/checkout');
+    expect(screen.getByRole('dialog')).toBeInTheDocument();
+    expect(screen.getByText('Complete your order')).toBeInTheDocument();
   });
 
-  it('navigates to /checkout when the hero main banner is clicked', () => {
+  it('opens the checkout modal when the hero main banner is clicked', () => {
     renderPage();
     fireEvent.click(screen.getByRole('button', { name: /buy ethiopian yirgacheffe/i }));
-    expect(mockNavigate).toHaveBeenCalledWith('/checkout');
+    expect(screen.getByRole('dialog')).toBeInTheDocument();
   });
 
-  it('navigates to /checkout when hero "Buy Kenya AA" is clicked', () => {
+  it('opens the checkout modal when hero "Buy Kenya AA" is clicked', () => {
     renderPage();
     fireEvent.click(screen.getByRole('button', { name: /buy kenya aa/i }));
-    expect(mockNavigate).toHaveBeenCalledWith('/checkout');
+    expect(screen.getByRole('dialog')).toBeInTheDocument();
   });
 
-  it('navigates to /checkout when hero "Buy Colombian Supremo" is clicked', () => {
+  it('opens the checkout modal when hero "Buy Colombian Supremo" is clicked', () => {
     renderPage();
     fireEvent.click(screen.getByRole('button', { name: /buy colombian supremo/i }));
-    expect(mockNavigate).toHaveBeenCalledWith('/checkout');
+    expect(screen.getByRole('dialog')).toBeInTheDocument();
   });
 
   it('renders the footer copyright text', () => {
