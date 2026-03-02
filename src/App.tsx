@@ -1,35 +1,70 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import './App.css';
+import { useEffect } from 'react';
+import { Provider } from 'react-redux';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 
-function App() {
-  const [count, setCount] = useState(0)
+import { store } from '@/store/store';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { rehydrateSelectedProduct } from '@/store/slices/checkoutSlice';
+import { ThemeProvider } from '@/contexts/ThemeContext';
+import { ProductPage } from '@/pages/ProductPage/ProductPage';
+import { loadSelectedProductId } from '@/utils/persistence';
 
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+// ── Rehydration layer ─────────────────────────────────────────────────────────
+// Once products load from API/mock, restore the previously selected product
+// from localStorage so a page refresh doesn't break the checkout flow.
+
+function RehydrationLayer() {
+  const dispatch = useAppDispatch();
+  const products = useAppSelector((s) => s.products.items);
+  const selectedProduct = useAppSelector((s) => s.checkout.selectedProduct);
+
+  useEffect(() => {
+    if (products.length === 0 || selectedProduct !== null) return;
+    const savedId = loadSelectedProductId();
+    if (!savedId) return;
+    const found = products.find((p) => p.id === savedId);
+    if (found) dispatch(rehydrateSelectedProduct(found));
+  }, [products, selectedProduct, dispatch]);
+
+  return null;
 }
 
-export default App
+// ── Placeholder pages (Steps 2-4 — implemented in future iterations) ──────────
+
+function CheckoutPage() {
+  return (
+    <div className="flex min-h-screen items-center justify-center text-muted-foreground">
+      Checkout — coming in Step 2
+    </div>
+  );
+}
+
+// ── Routing ───────────────────────────────────────────────────────────────────
+
+function AppRoutes() {
+  return (
+    <>
+      <RehydrationLayer />
+      <Routes>
+        <Route path="/" element={<ProductPage />} />
+        <Route path="/checkout" element={<CheckoutPage />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </>
+  );
+}
+
+// ── Root ──────────────────────────────────────────────────────────────────────
+
+export default function App() {
+  return (
+    <Provider store={store}>
+      <ThemeProvider>
+        <BrowserRouter>
+          <AppRoutes />
+        </BrowserRouter>
+      </ThemeProvider>
+    </Provider>
+  );
+}
