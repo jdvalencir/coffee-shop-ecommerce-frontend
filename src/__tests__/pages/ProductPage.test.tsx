@@ -186,19 +186,19 @@ describe('ProductPage', () => {
 
   it('opens the checkout modal when the hero main banner is clicked', () => {
     renderPage();
-    fireEvent.click(screen.getByRole('button', { name: /buy ethiopian yirgacheffe/i }));
-    expect(screen.getByRole('dialog')).toBeInTheDocument();
-  });
-
-  it('opens the checkout modal when hero "Buy Kenya AA" is clicked', () => {
-    renderPage();
     fireEvent.click(screen.getByRole('button', { name: /buy kenya aa/i }));
     expect(screen.getByRole('dialog')).toBeInTheDocument();
   });
 
-  it('opens the checkout modal when hero "Buy Colombian Supremo" is clicked', () => {
+  it('opens the checkout modal when hero "Buy Sumatra Mandheling" is clicked', () => {
     renderPage();
-    fireEvent.click(screen.getByRole('button', { name: /buy colombian supremo/i }));
+    fireEvent.click(screen.getByRole('button', { name: /buy sumatra mandheling/i }));
+    expect(screen.getByRole('dialog')).toBeInTheDocument();
+  });
+
+  it('opens the checkout modal when hero "Buy Guatemala Antigua" is clicked', () => {
+    renderPage();
+    fireEvent.click(screen.getByRole('button', { name: /buy guatemala antigua/i }));
     expect(screen.getByRole('dialog')).toBeInTheDocument();
   });
 

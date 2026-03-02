@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import type { Product, RoastLevel } from '@/types';
 import { CreditCard, MapPin, Package } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 // ── Roast level visual config ─────────────────────────────────────────────────
 
@@ -105,13 +106,25 @@ export function ProductCard({ product, onBuy }: ProductCardProps) {
 
         {/* Name */}
         <h3 className="text-base font-semibold leading-snug text-foreground">
-          {product.name}
+          <Link
+            to={`/products/${product.id}`}
+            className="transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+          >
+            {product.name}
+          </Link>
         </h3>
 
         {/* Description */}
         <p className="line-clamp-2 text-sm leading-relaxed text-muted-foreground">
           {product.description}
         </p>
+
+        <Link
+          to={`/products/${product.id}`}
+          className="w-fit text-xs font-medium text-primary underline-offset-4 hover:underline"
+        >
+          View details
+        </Link>
 
         {/* Tasting notes */}
         <div className="flex flex-wrap gap-1.5">

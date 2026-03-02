@@ -34,6 +34,7 @@ import {
 } from "@/store/slices/checkoutSlice";
 import { fetchProducts } from "@/store/slices/productsSlice";
 import type { Product, RoastLevel } from "@/types";
+import { formatCOP } from "@/utils/formatters";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -66,10 +67,12 @@ const TRUST_BADGES: TrustBadge[] = [
   { icon: Truck, title: "Fast Delivery", sub: "1 – 3 business days" },
 ];
 
-// Hero-featured product IDs (matches mock data)
-const HERO_MAIN_ID = "prod-001"; // Ethiopian Yirgacheffe
-const HERO_SIDE_1_ID = "prod-005"; // Kenya AA
-const HERO_SIDE_2_ID = "prod-002"; // Colombian Supremo
+const ROAST_LABELS: Record<RoastLevel, string> = {
+  light: "Light Roast",
+  medium: "Medium Roast",
+  "medium-dark": "Medium Dark",
+  dark: "Dark Roast",
+};
 
 // ── Sub-components ────────────────────────────────────────────────────────────
 
@@ -95,6 +98,18 @@ function ProductCardSkeleton() {
           <div className="h-3 w-14 rounded bg-muted" />
         </div>
         <div className="h-12 w-full rounded-xl bg-muted" />
+      </div>
+    </div>
+  );
+}
+
+function HeroSkeleton() {
+  return (
+    <div className="grid flex-1 grid-cols-1 gap-4 lg:grid-cols-3 lg:min-h-0">
+      <div className="animate-pulse overflow-hidden rounded-2xl bg-muted lg:col-span-2 lg:h-full" />
+      <div className="grid gap-4 sm:grid-cols-2 lg:min-h-0 lg:grid-cols-1">
+        <div className="animate-pulse min-h-36 rounded-2xl bg-muted lg:min-h-0" />
+        <div className="animate-pulse min-h-36 rounded-2xl bg-muted lg:min-h-0" />
       </div>
     </div>
   );
@@ -144,11 +159,6 @@ export function ProductPage() {
     setIsCheckoutOpen(true);
   }
 
-  function handleHeroBuy(productId: string) {
-    const product = products.find((p) => p.id === productId);
-    if (product) handleBuy(product);
-  }
-
   const filtered = products.filter((p) => {
     const matchesRoast =
       activeFilter === "all" || p.roastLevel === activeFilter;
@@ -159,6 +169,12 @@ export function ProductPage() {
       p.notes.some((n) => n.toLowerCase().includes(search.toLowerCase()));
     return matchesRoast && matchesSearch;
   });
+  const heroPool =
+    filtered.length >= 3 ? filtered : products.length >= 3 ? products : filtered;
+  const heroSource = [...heroPool]
+    .sort((a, b) => a.stock - b.stock || a.price - b.price)
+    .slice(0, 3);
+  const [heroMain, ...heroSides] = heroSource;
 
   // ── Render ──────────────────────────────────────────────────────────────────
 
@@ -225,173 +241,131 @@ export function ProductPage() {
           HERO — NextMerce-style grid
       ══════════════════════════════════════════════ */}
       <section className="border-b border-border/40 bg-muted/20 dark:bg-stone-950/40">
-        <div className="mx-auto max-w-7xl px-4 py-5 sm:px-6">
-          {/* ── Main grid: hero (2 cols) + side cards (1 col) ── */}
-          <div className="grid grid-cols-1 gap-4 lg:grid-cols-3 lg:h-[420px]">
-            {/* ─── Main hero banner ─── */}
-            <div
-              className={cn(
-                "group relative lg:col-span-2 h-72 lg:h-full overflow-hidden rounded-2xl cursor-pointer",
-              )}
-              onClick={() => handleHeroBuy(HERO_MAIN_ID)}
-              role="button"
-              tabIndex={0}
-              onKeyDown={(e) =>
-                e.key === "Enter" && handleHeroBuy(HERO_MAIN_ID)
-              }
-              aria-label="Buy Ethiopian Yirgacheffe"
-            >
-              {/* Background image */}
-              <img
-                src="https://images.unsplash.com/photo-1559496417-e7f25cb247f3?auto=format&fit=crop&w=1200&q=85"
-                alt="Ethiopian Yirgacheffe coffee bag"
-                className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-              />
+        <div className="mx-auto flex min-h-[calc(100vh-3.5rem)] max-w-7xl flex-col px-4 py-5 sm:px-6 sm:py-6">
+          {status === "loading" && <HeroSkeleton />}
 
-              {/* Gradient overlay — stronger on left, fades right */}
-              <div className="absolute inset-0 bg-linear-to-r from-stone-950/92 via-stone-950/55 to-stone-950/10" />
-              {/* Subtle bottom vignette */}
-              <div className="absolute inset-0 bg-linear-to-t from-stone-950/40 via-transparent to-transparent" />
+          {status !== "loading" && heroMain && (
+            <div className="grid flex-1 grid-cols-1 gap-4 lg:grid-cols-3 lg:min-h-0">
+              <div
+                className={cn(
+                  "group relative h-[44vh] min-h-[22rem] cursor-pointer overflow-hidden rounded-2xl lg:col-span-2 lg:h-full",
+                )}
+                onClick={() => handleBuy(heroMain)}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => e.key === "Enter" && handleBuy(heroMain)}
+                aria-label={`Buy ${heroMain.name}`}
+              >
+                <img
+                  src={heroMain.image}
+                  alt={`${heroMain.name} coffee`}
+                  className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-linear-to-r from-stone-950/92 via-stone-950/55 to-stone-950/10" />
+                <div className="absolute inset-0 bg-linear-to-t from-stone-950/40 via-transparent to-transparent" />
 
-              {/* Content */}
-              <div className="relative z-10 flex h-full flex-col justify-between p-6 md:p-8">
-                {/* Top badges */}
-                <div className="flex flex-wrap items-center gap-2">
-                  <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-500/30 bg-amber-500/15 px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-amber-400 backdrop-blur-sm">
-                    <span className="h-1.5 w-1.5 rounded-full bg-amber-400" />
-                    Staff Pick
-                  </span>
-                  <span className="rounded-full border border-white/10 bg-white/10 px-3 py-1 text-[11px] font-medium text-white/70 backdrop-blur-sm">
-                    Light Roast
-                  </span>
-                </div>
-
-                {/* Bottom content */}
-                <div>
-                  <p className="mb-1.5 text-[11px] font-semibold uppercase tracking-widest text-amber-400/80">
-                    Ethiopia · 500g Bag
-                  </p>
-                  <h2 className="mb-3 text-3xl font-extrabold leading-tight tracking-tight text-white sm:text-4xl lg:text-[42px]">
-                    Ethiopian
-                    <br />
-                    Yirgacheffe
-                  </h2>
-                  <p className="mb-5 max-w-xs text-sm leading-relaxed text-white/65">
-                    Layers of jasmine, bergamot and ripe blueberry — our most
-                    celebrated light roast from the birthplace of coffee.
-                  </p>
-
-                  {/* CTAs */}
-                  <div className="flex flex-wrap items-center gap-3">
-                    <Button
-                      size="lg"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleHeroBuy(HERO_MAIN_ID);
-                      }}
-                      className="shadow-lg shadow-primary/25"
-                    >
-                      Pay with Credit Card
-                    </Button>
-                    <span className="rounded-xl border border-white/15 bg-white/10 px-4 py-2.5 text-sm font-bold text-white backdrop-blur-sm">
-                      $65,000 COP
+                <div className="relative z-10 flex h-full flex-col justify-between p-6 md:p-8">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-500/30 bg-amber-500/15 px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-amber-400 backdrop-blur-sm">
+                      <span className="h-1.5 w-1.5 rounded-full bg-amber-400" />
+                      Featured in Catalog
+                    </span>
+                    <span className="rounded-full border border-white/10 bg-white/10 px-3 py-1 text-[11px] font-medium text-white/70 backdrop-blur-sm">
+                      {ROAST_LABELS[heroMain.roastLevel]}
                     </span>
                   </div>
-                </div>
-              </div>
-            </div>
 
-            {/* ─── Side cards column ─── */}
-            <div className="flex h-full flex-row gap-4 lg:flex-col">
-              {/* Side card 1 — Kenya AA */}
-              <div
-                className="group relative flex-1 overflow-hidden rounded-2xl min-h-36 lg:min-h-0 cursor-pointer"
-                onClick={() => handleHeroBuy(HERO_SIDE_1_ID)}
-                role="button"
-                tabIndex={0}
-                onKeyDown={(e) =>
-                  e.key === "Enter" && handleHeroBuy(HERO_SIDE_1_ID)
-                }
-                aria-label="Buy Kenya AA"
-              >
-                <img
-                  src="https://images.unsplash.com/photo-1561478908-d067fe75a553?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                  alt="Kenya AA coffee"
-                  className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-linear-to-t from-stone-950/88 via-stone-950/30 to-transparent" />
+                  <div>
+                    <p className="mb-1.5 text-[11px] font-semibold uppercase tracking-widest text-amber-400/80">
+                      {heroMain.origin} · {heroMain.weight}g Bag
+                    </p>
+                    <h2 className="mb-3 max-w-lg text-3xl font-extrabold leading-tight tracking-tight text-white sm:text-4xl lg:text-[42px]">
+                      {heroMain.name}
+                    </h2>
+                    <p className="mb-5 max-w-xl text-sm leading-relaxed text-white/65">
+                      {heroMain.description}
+                    </p>
 
-                <div className="relative z-10 flex h-full flex-col justify-between p-4">
-                  {/* Badge */}
-                  <span className="self-start rounded-full bg-destructive/85 px-2.5 py-0.5 text-[11px] font-semibold text-white backdrop-blur-sm">
-                    Only 5 left
-                  </span>
-
-                  {/* Info + arrow */}
-                  <div className="flex items-end justify-between">
-                    <div>
-                      <p className="text-[10px] font-medium uppercase tracking-wider text-white/55">
-                        Kenya · Light Roast
-                      </p>
-                      <p className="text-sm font-bold text-white">Kenya AA</p>
-                      <p className="text-sm font-bold text-amber-400">
-                        $72,000 COP
-                      </p>
-                    </div>
-                    <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-white/10 backdrop-blur-sm transition-all duration-200 group-hover:bg-primary group-hover:scale-110">
-                      <ArrowRight className="h-3.5 w-3.5 text-white" />
+                    <div className="flex flex-wrap items-center gap-3">
+                      <Button
+                        size="lg"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleBuy(heroMain);
+                        }}
+                        className="shadow-lg shadow-primary/25"
+                      >
+                        Pay with Credit Card
+                      </Button>
+                      <span className="rounded-xl border border-white/15 bg-white/10 px-4 py-2.5 text-sm font-bold text-white backdrop-blur-sm">
+                        {formatCOP(heroMain.price)}
+                      </span>
                     </div>
                   </div>
                 </div>
               </div>
 
-              {/* Side card 2 — Colombian Supremo */}
-              <div
-                className="group relative flex-1 overflow-hidden rounded-2xl min-h-36 lg:min-h-0 cursor-pointer"
-                onClick={() => handleHeroBuy(HERO_SIDE_2_ID)}
-                role="button"
-                tabIndex={0}
-                onKeyDown={(e) =>
-                  e.key === "Enter" && handleHeroBuy(HERO_SIDE_2_ID)
-                }
-                aria-label="Buy Colombian Supremo"
-              >
-                <img
-                  src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                  alt="Colombian Supremo coffee"
-                  className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-linear-to-t from-stone-950/88 via-stone-950/30 to-transparent" />
+              <div className="flex h-full flex-row gap-4 lg:min-h-0 lg:flex-col">
+                {heroSides.map((product) => {
+                  const badgeText =
+                    product.stock <= 5
+                      ? `Only ${product.stock} left`
+                      : product.roastLevel === "medium"
+                        ? "Bestseller"
+                        : "Fresh Pick";
 
-                <div className="relative z-10 flex h-full flex-col justify-between p-4">
-                  {/* Badge */}
-                  <span className="self-start rounded-full bg-amber-600/85 px-2.5 py-0.5 text-[11px] font-semibold text-white backdrop-blur-sm">
-                    Bestseller
-                  </span>
+                  return (
+                    <div
+                      key={product.id}
+                      className="group relative min-h-40 flex-1 cursor-pointer overflow-hidden rounded-2xl lg:min-h-0"
+                      onClick={() => handleBuy(product)}
+                      role="button"
+                      tabIndex={0}
+                      onKeyDown={(e) => e.key === "Enter" && handleBuy(product)}
+                      aria-label={`Buy ${product.name}`}
+                    >
+                      <img
+                        src={product.image}
+                        alt={`${product.name} coffee`}
+                        className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+                      />
+                      <div className="absolute inset-0 bg-linear-to-t from-stone-950/88 via-stone-950/30 to-transparent" />
 
-                  {/* Info + arrow */}
-                  <div className="flex items-end justify-between">
-                    <div>
-                      <p className="text-[10px] font-medium uppercase tracking-wider text-white/55">
-                        Colombia · Medium Roast
-                      </p>
-                      <p className="text-sm font-bold text-white">
-                        Colombian Supremo
-                      </p>
-                      <p className="text-sm font-bold text-amber-400">
-                        $48,000 COP
-                      </p>
+                      <div className="relative z-10 flex h-full flex-col justify-between p-4">
+                        <span
+                          className={cn(
+                            "self-start rounded-full px-2.5 py-0.5 text-[11px] font-semibold text-white backdrop-blur-sm",
+                            product.stock <= 5
+                              ? "bg-destructive/85"
+                              : "bg-amber-600/85",
+                          )}
+                        >
+                          {badgeText}
+                        </span>
+
+                        <div className="flex items-end justify-between gap-3">
+                          <div>
+                            <p className="text-[10px] font-medium uppercase tracking-wider text-white/55">
+                              {product.origin} · {ROAST_LABELS[product.roastLevel]}
+                            </p>
+                            <p className="text-sm font-bold text-white">
+                              {product.name}
+                            </p>
+                            <p className="text-sm font-bold text-amber-400">
+                              {formatCOP(product.price)}
+                            </p>
+                          </div>
+                          <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-white/10 backdrop-blur-sm transition-all duration-200 group-hover:scale-110 group-hover:bg-primary">
+                            <ArrowRight className="h-3.5 w-3.5 text-white" />
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                    <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-white/10 backdrop-blur-sm transition-all duration-200 group-hover:bg-primary group-hover:scale-110">
-                      <ArrowRight className="h-3.5 w-3.5 text-white" />
-                    </div>
-                  </div>
-                </div>
+                  );
+                })}
               </div>
             </div>
-            {/* end side cards */}
-          </div>
-          {/* end main grid */}
+          )}
 
           {/* ── Trust badges bar ── */}
           {/* gap-px + bg-border creates hairline dividers between cells */}

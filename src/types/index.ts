@@ -16,6 +16,8 @@ export interface Product {
   weight: number;
   /** Tasting notes */
   notes: string[];
+  /** When the product record was created in the backend */
+  createdAt?: string;
 }
 
 export interface CreditCard {
