@@ -166,7 +166,7 @@ export function useProcessPayment() {
       }
 
       const totalAmount =
-        selectedProduct.price + BASE_FEE_COP + DELIVERY_FEE_COP;
+        (selectedProduct.price + BASE_FEE_COP + DELIVERY_FEE_COP) * 100;
 
       const transactionResponse = await fetch(TRANSACTIONS_URL, {
         method: "POST",
