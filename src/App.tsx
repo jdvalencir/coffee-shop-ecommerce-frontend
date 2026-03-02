@@ -8,6 +8,7 @@ import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { rehydrateSelectedProduct } from '@/store/slices/checkoutSlice';
 import { ThemeProvider } from '@/contexts/ThemeContext';
 import { ProductPage } from '@/pages/ProductPage/ProductPage';
+import { CheckoutPage } from '@/pages/CheckoutPage/CheckoutPage';
 import { loadSelectedProductId } from '@/utils/persistence';
 
 // ── Rehydration layer ─────────────────────────────────────────────────────────
@@ -28,16 +29,6 @@ function RehydrationLayer() {
   }, [products, selectedProduct, dispatch]);
 
   return null;
-}
-
-// ── Placeholder pages (Steps 2-4 — implemented in future iterations) ──────────
-
-function CheckoutPage() {
-  return (
-    <div className="flex min-h-screen items-center justify-center text-muted-foreground">
-      Checkout — coming in Step 2
-    </div>
-  );
 }
 
 // ── Routing ───────────────────────────────────────────────────────────────────
