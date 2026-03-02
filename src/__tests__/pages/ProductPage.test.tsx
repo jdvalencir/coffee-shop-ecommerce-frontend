@@ -8,9 +8,18 @@ import { ThemeProvider } from '@/contexts/ThemeContext';
 import productsReducer from '@/store/slices/productsSlice';
 import checkoutReducer from '@/store/slices/checkoutSlice';
 import { mockProducts } from '@/mock/products';
+import { getProducts } from '@/services/productService';
 
 jest.mock('@/services/productService', () => ({
   getProducts: jest.fn().mockResolvedValue([]),
+}));
+
+jest.mock('@/components/checkout/PaymentSummary', () => ({
+  PaymentSummary: () => null,
+}));
+
+jest.mock('@/components/checkout/FinalStatus', () => ({
+  FinalStatus: () => null,
 }));
 
 type ProductsStatus = 'idle' | 'loading' | 'succeeded' | 'failed';
@@ -207,9 +216,9 @@ describe('ProductPage', () => {
   });
 
   it('dispatches fetchProducts when status is idle', async () => {
-    const { getProducts } = require('@/services/productService') as { getProducts: jest.Mock };
-    getProducts.mockResolvedValueOnce(mockProducts);
+    const mockedGetProducts = getProducts as jest.Mock;
+    mockedGetProducts.mockResolvedValueOnce(mockProducts);
     await act(async () => { renderPage('idle'); });
-    expect(getProducts).toHaveBeenCalled();
+    expect(mockedGetProducts).toHaveBeenCalled();
   });
 });
