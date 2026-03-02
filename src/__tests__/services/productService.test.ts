@@ -63,11 +63,46 @@ describe('productService', () => {
   // ── Real API mode ──────────────────────────────────────────────────────────
 
   describe('getProducts (real API mode)', () => {
-    it('calls GET /products and returns the response data', async () => {
-      mockAxiosGet.mockResolvedValueOnce({ data: mockProducts });
+    it('calls GET /products and normalizes wrapped API responses', async () => {
+      mockAxiosGet.mockResolvedValueOnce({
+        data: {
+          success: true,
+          products: [
+            {
+              id: 'prod-uuid-123',
+              name: 'Cafe de Origen 340g',
+              description: 'Cafe tostado de origen con notas achocolatadas',
+              price: 250000,
+              stock: 12,
+              imageUrl: 'https://cdn.example.com/products/cafe-origen.jpg',
+              createdAt: '2026-03-01T15:30:00.000Z',
+            },
+          ],
+        },
+      });
       const { getProducts } = loadService(false);
       const result = await getProducts();
       expect(mockAxiosGet).toHaveBeenCalledWith('/products');
+      expect(result).toEqual([
+        {
+          id: 'prod-uuid-123',
+          name: 'Cafe de Origen 340g',
+          description: 'Cafe tostado de origen con notas achocolatadas',
+          price: 250000,
+          stock: 12,
+          image: 'https://cdn.example.com/products/cafe-origen.jpg',
+          roastLevel: 'medium',
+          origin: 'Origen no especificado',
+          weight: 340,
+          notes: [],
+        },
+      ]);
+    });
+
+    it('keeps supporting array responses from the API', async () => {
+      mockAxiosGet.mockResolvedValueOnce({ data: mockProducts });
+      const { getProducts } = loadService(false);
+      const result = await getProducts();
       expect(result).toEqual(mockProducts);
     });
 
@@ -79,13 +114,31 @@ describe('productService', () => {
   });
 
   describe('getProductById (real API mode)', () => {
-    it('calls GET /products/:id and returns the response data', async () => {
-      const expected = mockProducts[0];
+    it('calls GET /products/:id and normalizes the response data', async () => {
+      const expected = {
+        id: 'prod-001',
+        name: 'Ethiopian Yirgacheffe',
+        description: 'A bright, complex light roast from the birthplace of coffee.',
+        price: 65_000,
+        stock: 15,
+        imageUrl: 'http://example.com/img.jpg',
+      };
       mockAxiosGet.mockResolvedValueOnce({ data: expected });
       const { getProductById } = loadService(false);
       const result = await getProductById('prod-001');
       expect(mockAxiosGet).toHaveBeenCalledWith('/products/prod-001');
-      expect(result).toEqual(expected);
+      expect(result).toEqual({
+        id: 'prod-001',
+        name: 'Ethiopian Yirgacheffe',
+        description: 'A bright, complex light roast from the birthplace of coffee.',
+        price: 65_000,
+        stock: 15,
+        image: 'http://example.com/img.jpg',
+        roastLevel: 'medium',
+        origin: 'Origen no especificado',
+        weight: 340,
+        notes: [],
+      });
     });
 
     it('propagates API errors', async () => {
