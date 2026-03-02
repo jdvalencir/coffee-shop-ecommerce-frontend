@@ -1,5 +1,17 @@
 jest.mock('@/services/productService', () => ({
   getProducts: jest.fn().mockResolvedValue([]),
+  getProductById: jest.fn().mockResolvedValue({
+    id: 'prod-001',
+    name: 'Ethiopian Yirgacheffe',
+    description: 'A bright, complex light roast from the birthplace of coffee.',
+    price: 65_000,
+    stock: 15,
+    image: 'http://example.com/img.jpg',
+    roastLevel: 'light',
+    origin: 'Ethiopia',
+    weight: 500,
+    notes: ['Blueberry', 'Jasmine'],
+  }),
 }));
 
 jest.mock('@/components/checkout/PaymentSummary', () => ({

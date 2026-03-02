@@ -8,7 +8,7 @@ import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { rehydrateSelectedProduct } from '@/store/slices/checkoutSlice';
 import { ThemeProvider } from '@/contexts/ThemeContext';
 import { ProductPage } from '@/pages/ProductPage/ProductPage';
-import { CheckoutPage } from '@/pages/CheckoutPage/CheckoutPage';
+import { ProductDetailPage } from '@/pages/ProductDetailPage/ProductDetailPage';
 import { loadSelectedProductId } from '@/utils/persistence';
 
 // ── Rehydration layer ─────────────────────────────────────────────────────────
@@ -39,7 +39,8 @@ function AppRoutes() {
       <RehydrationLayer />
       <Routes>
         <Route path="/" element={<ProductPage />} />
-        <Route path="/checkout" element={<CheckoutPage />} />
+        <Route path="/products" element={<ProductPage />} />
+        <Route path="/products/:id" element={<ProductDetailPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </>
