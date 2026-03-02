@@ -8,7 +8,8 @@ import {
   type TransactionStatus,
 } from "@/types";
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:3001";
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL ?? "http://localhost:3001";
 const CARD_TOKENIZATION_URL =
   import.meta.env.VITE_PAYMENT_TOKENIZATION_URL ??
   "https://api-sandbox.co.uat.wompi.dev/v1/tokens/cards";
@@ -165,7 +166,7 @@ export function useProcessPayment() {
       }
 
       const totalAmount =
-        (selectedProduct.price + BASE_FEE_COP + DELIVERY_FEE_COP) * 100;
+        selectedProduct.price + BASE_FEE_COP + DELIVERY_FEE_COP;
 
       const transactionResponse = await fetch(TRANSACTIONS_URL, {
         method: "POST",
