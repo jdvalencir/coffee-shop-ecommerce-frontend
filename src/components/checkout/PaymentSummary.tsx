@@ -1,18 +1,24 @@
-import { AlertTriangle, CreditCard, Loader2, MapPin, ShieldCheck } from 'lucide-react';
+import {
+  AlertTriangle,
+  CreditCard,
+  Loader2,
+  MapPin,
+  ShieldCheck,
+} from "lucide-react";
 
-import { useProcessPayment } from '@/hooks/useProcessPayment';
-import { useAppSelector } from '@/store/hooks';
-import { BASE_FEE_COP, DELIVERY_FEE_COP } from '@/types';
-import { formatCOP } from '@/utils/formatters';
-import { Button } from '@/components/ui/button';
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
-import { Separator } from '@/components/ui/separator';
+} from "@/components/ui/dialog";
+import { Separator } from "@/components/ui/separator";
+import { useProcessPayment } from "@/hooks/useProcessPayment";
+import { useAppSelector } from "@/store/hooks";
+import { BASE_FEE_COP, DELIVERY_FEE_COP } from "@/types";
+import { formatCOP } from "@/utils/formatters";
 
 interface PaymentSummaryProps {
   open: boolean;
@@ -30,10 +36,22 @@ function SummaryRow({
 }) {
   return (
     <div className="flex items-center justify-between gap-4">
-      <span className={emphasis ? 'text-sm font-semibold text-foreground' : 'text-sm text-muted-foreground'}>
+      <span
+        className={
+          emphasis
+            ? "text-sm font-semibold text-foreground"
+            : "text-sm text-muted-foreground"
+        }
+      >
         {label}
       </span>
-      <span className={emphasis ? 'text-base font-bold text-foreground' : 'text-sm font-semibold text-foreground'}>
+      <span
+        className={
+          emphasis
+            ? "text-base font-bold text-foreground"
+            : "text-sm font-semibold text-foreground"
+        }
+      >
         {formatCOP(value)}
       </span>
     </div>
@@ -41,7 +59,9 @@ function SummaryRow({
 }
 
 export function PaymentSummary({ open, onOpenChange }: PaymentSummaryProps) {
-  const selectedProduct = useAppSelector((state) => state.checkout.selectedProduct);
+  const selectedProduct = useAppSelector(
+    (state) => state.checkout.selectedProduct,
+  );
   const delivery = useAppSelector((state) => state.checkout.delivery);
   const creditCard = useAppSelector((state) => state.checkout.creditCard);
   const { processPayment, isProcessing, error } = useProcessPayment();
@@ -63,8 +83,8 @@ export function PaymentSummary({ open, onOpenChange }: PaymentSummaryProps) {
                 Resumen de pago
               </DialogTitle>
               <DialogDescription className="text-left text-sm leading-6">
-                Revisa el desglose final antes de tokenizar la tarjeta y
-                enviar la transacción segura a tu backend.
+                Revisa el desglose final de tu pedido antes de confirmar el
+                pago.
               </DialogDescription>
             </DialogHeader>
           </div>
@@ -142,8 +162,8 @@ export function PaymentSummary({ open, onOpenChange }: PaymentSummaryProps) {
               <div className="flex items-start gap-2.5">
                 <ShieldCheck className="mt-0.5 h-4 w-4 flex-shrink-0 text-primary" />
                 <p className="text-xs leading-5 text-muted-foreground">
-                  La acción final tokeniza primero la tarjeta y luego envía
-                  solo el token junto con los datos del pedido a tu endpoint local.
+                  La acción final tokeniza primero la tarjeta y luego envía solo
+                  el token junto con los datos del pedido a tu endpoint local.
                 </p>
               </div>
             </div>
@@ -157,8 +177,12 @@ export function PaymentSummary({ open, onOpenChange }: PaymentSummaryProps) {
                 void processPayment();
               }}
             >
-              {isProcessing ? <Loader2 className="h-4 w-4 animate-spin" /> : <ShieldCheck className="h-4 w-4" />}
-              {isProcessing ? 'Procesando pago seguro…' : 'Confirmar y pagar'}
+              {isProcessing ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <ShieldCheck className="h-4 w-4" />
+              )}
+              {isProcessing ? "Procesando pago seguro…" : "Confirmar y pagar"}
             </Button>
           </div>
         </div>

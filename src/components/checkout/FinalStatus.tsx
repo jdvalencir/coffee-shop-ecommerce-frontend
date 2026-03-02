@@ -98,7 +98,10 @@ export function FinalStatus({ open }: FinalStatusProps) {
 
   return (
     <Dialog open={open} onOpenChange={() => undefined}>
-      <DialogContent className="max-w-md border-border/60 bg-background p-0 sm:rounded-3xl">
+      <DialogContent
+        showCloseButton={false}
+        className="max-w-md border-border/60 bg-background p-0 sm:rounded-3xl"
+      >
         <div className="overflow-hidden rounded-3xl">
           <div className="bg-linear-to-br from-background via-background to-primary/10 px-6 py-6">
             <DialogHeader>
@@ -121,15 +124,9 @@ export function FinalStatus({ open }: FinalStatusProps) {
                   Pago en proceso
                 </h2>
                 <p className="mt-2 text-sm leading-6 text-muted-foreground">
-                  Tu transacción está pendiente. Estamos consultando el backend
-                  cada 3 segundos hasta que la pasarela devuelva el resultado
-                  final.
+                  Tu transacción está pendiente. Esto puede tardar unos
+                  momentos. Por favor, espera mientras confirmamos el resultado.
                 </p>
-                {paymentResult.transactionId ? (
-                  <p className="mt-4 rounded-full bg-muted px-4 py-2 text-xs font-medium text-muted-foreground">
-                    ID de transacción: {paymentResult.transactionId}
-                  </p>
-                ) : null}
               </div>
             ) : null}
 

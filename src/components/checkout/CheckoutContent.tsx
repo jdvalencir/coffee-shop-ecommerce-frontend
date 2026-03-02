@@ -89,6 +89,7 @@ export function CheckoutContent({ onSubmitSuccess }: CheckoutContentProps) {
 
   const {
     handleSubmit,
+    trigger,
     formState: { errors, isSubmitting },
     control,
   } = form;
@@ -180,6 +181,17 @@ export function CheckoutContent({ onSubmitSuccess }: CheckoutContentProps) {
     }
   }
 
+  async function handleContinueToPayment() {
+    const isDeliveryValid = await trigger('delivery');
+
+    if (!isDeliveryValid) {
+      setActiveTab('delivery');
+      return;
+    }
+
+    setActiveTab('payment');
+  }
+
   return (
     <div className="grid grid-cols-1 gap-6 lg:grid-cols-5 lg:gap-10">
       <section className="order-1 lg:col-span-3 lg:order-2">
@@ -222,16 +234,30 @@ export function CheckoutContent({ onSubmitSuccess }: CheckoutContentProps) {
 
             <div className="mt-6">
               <Button
-                type="submit"
+                type="button"
                 size="lg"
                 className="w-full gap-2 shadow-lg shadow-primary/20"
                 disabled={isSubmitting}
+                onClick={() => {
+                  if (activeTab === 'delivery') {
+                    void handleContinueToPayment();
+                    return;
+                  }
+
+                  void handleSubmit(onSubmit, onInvalidSubmit)();
+                }}
               >
                 <Lock className="h-4 w-4" />
-                {isSubmitting ? 'Procesando…' : 'Revisar resumen de pago'}
+                {isSubmitting
+                  ? 'Procesando…'
+                  : activeTab === 'delivery'
+                    ? 'Continuar al pago'
+                    : 'Revisar resumen de pago'}
               </Button>
               <p className="mt-2 text-center text-xs text-muted-foreground">
-                Al confirmar, aceptas continuar con una transacción segura de prueba.
+                {activeTab === 'delivery'
+                  ? 'Primero completa tus datos de entrega para continuar a la tarjeta.'
+                  : 'Al confirmar, aceptas continuar con una transacción segura de prueba.'}
               </p>
             </div>
           </form>
