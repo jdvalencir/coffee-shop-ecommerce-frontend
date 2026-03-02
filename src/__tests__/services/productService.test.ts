@@ -95,6 +95,7 @@ describe('productService', () => {
           origin: 'Origen no especificado',
           weight: 340,
           notes: [],
+          createdAt: '2026-03-01T15:30:00.000Z',
         },
       ]);
     });
@@ -114,16 +115,22 @@ describe('productService', () => {
   });
 
   describe('getProductById (real API mode)', () => {
-    it('calls GET /products/:id and normalizes the response data', async () => {
-      const expected = {
-        id: 'prod-001',
-        name: 'Ethiopian Yirgacheffe',
-        description: 'A bright, complex light roast from the birthplace of coffee.',
-        price: 65_000,
-        stock: 15,
-        imageUrl: 'http://example.com/img.jpg',
-      };
-      mockAxiosGet.mockResolvedValueOnce({ data: expected });
+    it('calls GET /products/:id and normalizes wrapped response data', async () => {
+      mockAxiosGet.mockResolvedValueOnce({
+        data: {
+          success: true,
+          product: {
+            id: 'prod-001',
+            name: 'Ethiopian Yirgacheffe',
+            description: 'A bright, complex light roast from the birthplace of coffee.',
+            price: 65_000,
+            stock: 15,
+            imageUrl: 'http://example.com/img.jpg',
+            roastLevel: 'MEDIUM',
+            createdAt: '2026-03-01T15:30:00.000Z',
+          },
+        },
+      });
       const { getProductById } = loadService(false);
       const result = await getProductById('prod-001');
       expect(mockAxiosGet).toHaveBeenCalledWith('/products/prod-001');
@@ -138,7 +145,25 @@ describe('productService', () => {
         origin: 'Origen no especificado',
         weight: 340,
         notes: [],
+        createdAt: '2026-03-01T15:30:00.000Z',
       });
+    });
+
+    it('keeps supporting direct object responses from the API', async () => {
+      mockAxiosGet.mockResolvedValueOnce({
+        data: {
+          id: 'prod-002',
+          name: 'Colombian Supremo',
+          description: 'Balanced and sweet.',
+          price: 48_000,
+          stock: 8,
+          imageUrl: 'http://example.com/colombia.jpg',
+          roastLevel: 'medium_dark',
+        },
+      });
+      const { getProductById } = loadService(false);
+      const result = await getProductById('prod-002');
+      expect(result.roastLevel).toBe('medium-dark');
     });
 
     it('propagates API errors', async () => {

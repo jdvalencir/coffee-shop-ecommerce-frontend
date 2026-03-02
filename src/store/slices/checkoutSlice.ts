@@ -1,5 +1,11 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
-import type { CheckoutStep, CreditCard, DeliveryInfo, Product } from '@/types';
+import type {
+  CheckoutStep,
+  CreditCard,
+  DeliveryInfo,
+  PaymentResultState,
+  Product,
+} from '@/types';
 
 interface CheckoutState {
   step: CheckoutStep;
@@ -12,6 +18,8 @@ interface CheckoutState {
   creditCard: CreditCard | null;
   /** Delivery form — persisted by the store subscriber */
   delivery: DeliveryInfo | null;
+  /** Final transaction outcome for the status screen */
+  paymentResult: PaymentResultState;
 }
 
 function isCheckoutStep(v: unknown): v is CheckoutStep {
@@ -32,6 +40,12 @@ const initialState: CheckoutState = {
       return raw ? (JSON.parse(raw) as DeliveryInfo) : null;
     } catch { return null; }
   })(),
+  paymentResult: {
+    outcome: 'idle',
+    status: null,
+    transactionId: null,
+    message: null,
+  },
 };
 
 const checkoutSlice = createSlice({
@@ -53,11 +67,28 @@ const checkoutSlice = createSlice({
     setDelivery(state, action: PayloadAction<DeliveryInfo>) {
       state.delivery = action.payload;
     },
+    setPaymentResult(state, action: PayloadAction<PaymentResultState>) {
+      state.paymentResult = action.payload;
+    },
+    clearPaymentResult(state) {
+      state.paymentResult = {
+        outcome: 'idle',
+        status: null,
+        transactionId: null,
+        message: null,
+      };
+    },
     resetCheckout(state) {
       state.step = 'product';
       state.selectedProduct = null;
       state.creditCard = null;
       state.delivery = null;
+      state.paymentResult = {
+        outcome: 'idle',
+        status: null,
+        transactionId: null,
+        message: null,
+      };
     },
   },
 });
@@ -68,6 +99,8 @@ export const {
   setStep,
   setCreditCard,
   setDelivery,
+  setPaymentResult,
+  clearPaymentResult,
   resetCheckout,
 } = checkoutSlice.actions;
 

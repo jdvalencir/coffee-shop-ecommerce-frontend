@@ -24,7 +24,7 @@ export function CreditCardForm() {
         name="payment.cardNumber"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Card Number</FormLabel>
+            <FormLabel>Número de tarjeta</FormLabel>
             <FormControl>
               <div className="relative">
                 <Input
@@ -55,10 +55,10 @@ export function CreditCardForm() {
         name="payment.holderName"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Cardholder Name</FormLabel>
+            <FormLabel>Nombre del titular</FormLabel>
             <FormControl>
               <Input
-                placeholder="As it appears on your card"
+                placeholder="Como aparece en tu tarjeta"
                 autoComplete="cc-name"
                 {...field}
                 onChange={(e) =>
@@ -78,10 +78,10 @@ export function CreditCardForm() {
           name="payment.expiry"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Expiry Date</FormLabel>
+              <FormLabel>Fecha de vencimiento</FormLabel>
               <FormControl>
                 <Input
-                  placeholder="MM/YY"
+                  placeholder="MM/AA"
                   inputMode="numeric"
                   autoComplete="cc-exp"
                   maxLength={5}
@@ -124,8 +124,8 @@ export function CreditCardForm() {
       <div className="flex items-start gap-2 rounded-lg bg-muted/60 px-3 py-2.5">
         <ShieldCheck className="mt-0.5 h-3.5 w-3.5 flex-shrink-0 text-muted-foreground" />
         <p className="text-xs leading-relaxed text-muted-foreground">
-          Your card data is validated locally and never stored. CVV is kept
-          only in memory and discarded after the transaction.
+          Los datos de tu tarjeta se validan localmente y nunca se almacenan.
+          El CVV solo se mantiene en memoria y se descarta al finalizar la transacción.
         </p>
       </div>
     </div>

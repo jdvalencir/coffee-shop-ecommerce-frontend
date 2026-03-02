@@ -1,8 +1,9 @@
-import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
-import type { Product, RoastLevel } from '@/types';
-import { CreditCard, MapPin, Package } from 'lucide-react';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
+import type { Product, RoastLevel } from "@/types";
+import { CreditCard, MapPin, Package } from "lucide-react";
+import { Link } from "react-router-dom";
 
 // ── Roast level visual config ─────────────────────────────────────────────────
 
@@ -11,24 +12,24 @@ const ROAST_CONFIG: Record<
   { label: string; pill: string; dot: string }
 > = {
   light: {
-    label: 'Light Roast',
-    pill: 'bg-amber-100/90 text-amber-800 dark:bg-amber-900/50 dark:text-amber-300',
-    dot: 'bg-amber-400',
+    label: "Tueste Claro",
+    pill: "bg-amber-100/90 text-amber-800 dark:bg-amber-900/50 dark:text-amber-300",
+    dot: "bg-amber-400",
   },
   medium: {
-    label: 'Medium Roast',
-    pill: 'bg-orange-100/90 text-orange-800 dark:bg-orange-900/50 dark:text-orange-300',
-    dot: 'bg-orange-500',
+    label: "Tueste Medio",
+    pill: "bg-orange-100/90 text-orange-800 dark:bg-orange-900/50 dark:text-orange-300",
+    dot: "bg-orange-500",
   },
-  'medium-dark': {
-    label: 'Medium Dark',
-    pill: 'bg-red-100/90 text-red-900 dark:bg-red-900/40 dark:text-red-300',
-    dot: 'bg-red-700',
+  "medium-dark": {
+    label: "Tueste Medio Oscuro",
+    pill: "bg-red-100/90 text-red-900 dark:bg-red-900/40 dark:text-red-300",
+    dot: "bg-red-700",
   },
   dark: {
-    label: 'Dark Roast',
-    pill: 'bg-stone-900/80 text-stone-100 dark:bg-stone-700/80 dark:text-stone-100',
-    dot: 'bg-stone-900 dark:bg-stone-400',
+    label: "Tueste Oscuro",
+    pill: "bg-stone-900/80 text-stone-100 dark:bg-stone-700/80 dark:text-stone-100",
+    dot: "bg-stone-900 dark:bg-stone-400",
   },
 };
 
@@ -53,21 +54,21 @@ export function ProductCard({ product, onBuy }: ProductCardProps) {
           alt={product.name}
           loading="lazy"
           className={cn(
-            'h-full w-full object-cover transition-transform duration-500',
-            'group-hover:scale-105',
-            isOutOfStock && 'opacity-50 grayscale',
+            "h-full w-full object-cover transition-transform duration-500",
+            "group-hover:scale-105",
+            isOutOfStock && "opacity-50 grayscale",
           )}
         />
 
         {/* Roast level pill */}
         <span
           className={cn(
-            'absolute left-3 top-3 flex items-center gap-1.5 rounded-full px-2.5 py-1',
-            'text-xs font-medium backdrop-blur-sm',
+            "absolute left-3 top-3 flex items-center gap-1.5 rounded-full px-2.5 py-1",
+            "text-xs font-medium backdrop-blur-sm",
             roast.pill,
           )}
         >
-          <span className={cn('h-1.5 w-1.5 rounded-full', roast.dot)} />
+          <span className={cn("h-1.5 w-1.5 rounded-full", roast.dot)} />
           {roast.label}
         </span>
 
@@ -75,7 +76,7 @@ export function ProductCard({ product, onBuy }: ProductCardProps) {
         {isOutOfStock && (
           <div className="absolute inset-0 flex items-center justify-center bg-background/60 backdrop-blur-sm">
             <span className="rounded-full bg-background/90 px-4 py-1.5 text-xs font-semibold text-foreground shadow">
-              Out of Stock
+              Agotado
             </span>
           </div>
         )}
@@ -83,7 +84,7 @@ export function ProductCard({ product, onBuy }: ProductCardProps) {
         {/* Low stock ribbon */}
         {isLowStock && !isOutOfStock && (
           <span className="absolute right-3 top-3 rounded-full bg-destructive px-2.5 py-1 text-xs font-semibold text-destructive-foreground shadow">
-            Only {product.stock} left
+            Solo quedan {product.stock}
           </span>
         )}
       </div>
@@ -105,13 +106,25 @@ export function ProductCard({ product, onBuy }: ProductCardProps) {
 
         {/* Name */}
         <h3 className="text-base font-semibold leading-snug text-foreground">
-          {product.name}
+          <Link
+            to={`/products/${product.id}`}
+            className="transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+          >
+            {product.name}
+          </Link>
         </h3>
 
         {/* Description */}
         <p className="line-clamp-2 text-sm leading-relaxed text-muted-foreground">
           {product.description}
         </p>
+
+        <Link
+          to={`/products/${product.id}`}
+          className="w-fit text-xs font-medium text-primary underline-offset-4 hover:underline"
+        >
+          Ver detalle
+        </Link>
 
         {/* Tasting notes */}
         <div className="flex flex-wrap gap-1.5">
@@ -132,13 +145,15 @@ export function ProductCard({ product, onBuy }: ProductCardProps) {
         <div className="flex items-end justify-between border-t border-border/40 pt-3">
           <div>
             <p className="text-2xl font-bold tracking-tight text-primary">
-              ${product.price.toLocaleString('es-CO')}
+              ${product.price.toLocaleString("es-CO")}
             </p>
-            <p className="text-[11px] text-muted-foreground">COP / 500g bag</p>
+            <p className="text-[11px] text-muted-foreground">
+              COP / bolsa de {product.weight}g
+            </p>
           </div>
           {!isLowStock && !isOutOfStock && (
             <p className="text-xs text-muted-foreground">
-              {product.stock} in stock
+              {product.stock} disponibles
             </p>
           )}
         </div>
@@ -151,7 +166,7 @@ export function ProductCard({ product, onBuy }: ProductCardProps) {
           disabled={isOutOfStock}
         >
           <CreditCard className="h-4 w-4" />
-          {isOutOfStock ? 'Out of Stock' : 'Pay with Credit Card'}
+          {isOutOfStock ? "Agotado" : "Pagar con tarjeta"}
         </Button>
       </CardContent>
     </Card>

@@ -16,6 +16,8 @@ export interface Product {
   weight: number;
   /** Tasting notes */
   notes: string[];
+  /** When the product record was created in the backend */
+  createdAt?: string;
 }
 
 export interface CreditCard {
@@ -34,6 +36,15 @@ export interface DeliveryInfo {
   department: string;
 }
 
+export type PaymentOutcome = 'idle' | 'pending' | 'success' | 'error';
+
+export interface PaymentResultState {
+  outcome: PaymentOutcome;
+  status: TransactionStatus | null;
+  transactionId: string | null;
+  message: string | null;
+}
+
 export type TransactionStatus = 'pending' | 'approved' | 'declined' | 'error';
 
 export interface Transaction {
@@ -50,5 +61,5 @@ export interface Transaction {
 export type CheckoutStep = 'product' | 'checkout' | 'summary' | 'status';
 
 // ── Fee constants (COP) ───────────────────────────────────────────────────────
-export const BASE_FEE_COP = 3_000;
-export const DELIVERY_FEE_COP = 8_000;
+export const BASE_FEE_COP = 1_500;
+export const DELIVERY_FEE_COP = 12_000;

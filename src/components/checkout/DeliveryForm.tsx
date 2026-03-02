@@ -20,10 +20,10 @@ export function DeliveryForm() {
         name="delivery.fullName"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Full Name</FormLabel>
+            <FormLabel>Nombre completo</FormLabel>
             <FormControl>
               <Input
-                placeholder="John Doe"
+                placeholder="Juan Pérez"
                 autoComplete="name"
                 {...field}
               />
@@ -44,7 +44,7 @@ export function DeliveryForm() {
               <FormControl>
                 <Input
                   type="email"
-                  placeholder="you@example.com"
+                  placeholder="tu@correo.com"
                   autoComplete="email"
                   inputMode="email"
                   {...field}
@@ -60,7 +60,7 @@ export function DeliveryForm() {
           name="delivery.phone"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Phone</FormLabel>
+              <FormLabel>Teléfono</FormLabel>
               <FormControl>
                 <Input
                   type="tel"
@@ -82,10 +82,10 @@ export function DeliveryForm() {
         name="delivery.address"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Delivery Address</FormLabel>
+            <FormLabel>Dirección de entrega</FormLabel>
             <FormControl>
               <Input
-                placeholder="Street, number, apartment…"
+                placeholder="Calle, número, apartamento…"
                 autoComplete="street-address"
                 {...field}
               />
@@ -102,7 +102,7 @@ export function DeliveryForm() {
           name="delivery.city"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>City</FormLabel>
+              <FormLabel>Ciudad</FormLabel>
               <FormControl>
                 <Input
                   placeholder="Bogotá"
@@ -120,7 +120,7 @@ export function DeliveryForm() {
           name="delivery.department"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Department / Region</FormLabel>
+              <FormLabel>Departamento / Región</FormLabel>
               <FormControl>
                 <Input
                   placeholder="Cundinamarca"

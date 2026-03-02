@@ -10,7 +10,7 @@ type ApiProduct = {
   stock: number;
   imageUrl?: string;
   image?: string;
-  roastLevel?: Product['roastLevel'];
+  roastLevel?: string;
   origin?: string;
   weight?: number;
   notes?: string[];
@@ -22,6 +22,26 @@ type ProductsApiResponse = {
   products: ApiProduct[];
 };
 
+type ProductApiResponse = {
+  success: boolean;
+  product: ApiProduct;
+};
+
+function normalizeRoastLevel(value?: string): Product['roastLevel'] {
+  switch (value?.toLowerCase()) {
+    case 'light':
+      return 'light';
+    case 'medium-dark':
+    case 'medium_dark':
+      return 'medium-dark';
+    case 'dark':
+      return 'dark';
+    case 'medium':
+    default:
+      return 'medium';
+  }
+}
+
 function normalizeProduct(product: ApiProduct): Product {
   return {
     id: product.id,
@@ -30,10 +50,11 @@ function normalizeProduct(product: ApiProduct): Product {
     price: product.price,
     stock: product.stock,
     image: product.imageUrl ?? product.image ?? '',
-    roastLevel: product.roastLevel ?? 'medium',
+    roastLevel: normalizeRoastLevel(product.roastLevel),
     origin: product.origin ?? 'Origen no especificado',
     weight: product.weight ?? 340,
     notes: product.notes ?? [],
+    ...(product.createdAt ? { createdAt: product.createdAt } : {}),
   };
 }
 
@@ -50,6 +71,7 @@ export async function getProductById(id: string): Promise<Product> {
     if (!product) throw new Error(`Product ${id} not found`);
     return Promise.resolve(product);
   }
-  const { data } = await api.get<ApiProduct>(`/products/${id}`);
-  return normalizeProduct(data);
+  const { data } = await api.get<ApiProduct | ProductApiResponse>(`/products/${id}`);
+  const product = 'product' in data ? data.product : data;
+  return normalizeProduct(product);
 }

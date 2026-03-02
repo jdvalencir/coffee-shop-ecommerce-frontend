@@ -1,4 +1,4 @@
-# Brews & Beans — Coffee Shop E-commerce Frontend
+# Hispania Coffee — Coffee Shop E-commerce Frontend
 
 A single-page application built for the Wompi FullStack test. Users can browse specialty coffee products and complete a purchase via Wompi's payment gateway (sandbox).
 
@@ -37,6 +37,34 @@ pnpm build
 # .env
 VITE_API_BASE_URL=http://localhost:3001
 ```
+
+## GitHub Actions Deployment
+
+The repository now includes a GitHub Actions workflow at `.github/workflows/deploy-s3.yml` that:
+
+- runs on every push to `main`
+- installs dependencies with `pnpm`
+- runs the test suite
+- builds the Vite app
+- syncs `dist/` to an AWS S3 bucket
+- optionally invalidates CloudFront
+
+Configure these repository values before using it:
+
+| Type | Name | Description |
+|---|---|---|
+| Secret | `AWS_ROLE_TO_ASSUME` | IAM Role ARN to assume from GitHub via OIDC (`sts:AssumeRoleWithWebIdentity`) |
+| Variable | `AWS_REGION` | AWS region where the bucket lives (example: `us-east-1`) |
+| Variable | `S3_BUCKET` | Target S3 bucket name only (without `s3://`) |
+| Variable | `VITE_API_BASE_URL` | Production API base URL injected during the build |
+| Variable (optional) | `CLOUDFRONT_DISTRIBUTION_ID` | CloudFront distribution to invalidate after deploy |
+
+Recommended AWS setup:
+
+- enable GitHub OIDC in AWS IAM
+- create a role trusted by `token.actions.githubusercontent.com`
+- grant that role permissions for `s3:ListBucket`, `s3:PutObject`, `s3:DeleteObject`, and, if used, `cloudfront:CreateInvalidation`
+- configure your S3 bucket for static website hosting or behind CloudFront
 
 ## Application Flow
 
