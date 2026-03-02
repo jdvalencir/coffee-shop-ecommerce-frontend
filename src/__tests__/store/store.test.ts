@@ -66,6 +66,18 @@ describe('store persistence subscriber', () => {
     expect(() => store.getState()).not.toThrow();
   });
 
+  it('clears persisted checkout data when checkout is reset', () => {
+    store.dispatch(selectProduct(mockProduct));
+    store.dispatch(setStep('checkout'));
+    store.dispatch(setDelivery(mockDelivery));
+
+    store.dispatch(resetCheckout());
+
+    expect(localStorage.getItem('bb_step')).toBeNull();
+    expect(localStorage.getItem('bb_product_id')).toBeNull();
+    expect(localStorage.getItem('bb_delivery')).toBeNull();
+  });
+
   it('getState returns correct shape', () => {
     const state = store.getState();
     expect(state).toHaveProperty('products');

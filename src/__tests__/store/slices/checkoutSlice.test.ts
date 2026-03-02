@@ -1,12 +1,14 @@
 import checkoutReducer, {
+  clearPaymentResult,
   selectProduct,
   rehydrateSelectedProduct,
   setStep,
   setCreditCard,
   setDelivery,
+  setPaymentResult,
   resetCheckout,
 } from '@/store/slices/checkoutSlice';
-import type { Product, CreditCard, DeliveryInfo } from '@/types';
+import type { PaymentResultState, Product, CreditCard, DeliveryInfo } from '@/types';
 
 const mockProduct: Product = {
   id: 'prod-001',
@@ -37,6 +39,13 @@ const mockDelivery: DeliveryInfo = {
   department: 'Cundinamarca',
 };
 
+const mockPaymentResult: PaymentResultState = {
+  outcome: 'success',
+  status: 'approved',
+  transactionId: 'txn-001',
+  message: null,
+};
+
 describe('checkoutSlice', () => {
   // Default initial state when localStorage is empty (jsdom starts clean)
   const defaultState = {
@@ -44,6 +53,12 @@ describe('checkoutSlice', () => {
     selectedProduct: null,
     creditCard: null,
     delivery: null,
+    paymentResult: {
+      outcome: 'idle' as const,
+      status: null,
+      transactionId: null,
+      message: null,
+    },
   };
 
   it('returns the default initial state when localStorage is empty', () => {
@@ -51,6 +66,7 @@ describe('checkoutSlice', () => {
     expect(state.step).toBe('product');
     expect(state.selectedProduct).toBeNull();
     expect(state.creditCard).toBeNull();
+    expect(state.paymentResult).toEqual(defaultState.paymentResult);
   });
 
   // ── selectProduct ────────────────────────────────────────────────────────────
@@ -140,6 +156,19 @@ describe('checkoutSlice', () => {
 
   // ── resetCheckout ─────────────────────────────────────────────────────────────
 
+  describe('paymentResult', () => {
+    it('stores the final transaction outcome', () => {
+      const result = checkoutReducer(defaultState, setPaymentResult(mockPaymentResult));
+      expect(result.paymentResult).toEqual(mockPaymentResult);
+    });
+
+    it('clears the final transaction outcome', () => {
+      const withResult = { ...defaultState, paymentResult: mockPaymentResult };
+      const result = checkoutReducer(withResult, clearPaymentResult());
+      expect(result.paymentResult).toEqual(defaultState.paymentResult);
+    });
+  });
+
   describe('resetCheckout', () => {
     it('resets all state to defaults', () => {
       const filledState = {
@@ -147,12 +176,14 @@ describe('checkoutSlice', () => {
         selectedProduct: mockProduct,
         creditCard: mockCard,
         delivery: mockDelivery,
+        paymentResult: mockPaymentResult,
       };
       const result = checkoutReducer(filledState, resetCheckout());
       expect(result.step).toBe('product');
       expect(result.selectedProduct).toBeNull();
       expect(result.creditCard).toBeNull();
       expect(result.delivery).toBeNull();
+      expect(result.paymentResult).toEqual(defaultState.paymentResult);
     });
 
     it('is idempotent — resetting an already-reset state is safe', () => {
