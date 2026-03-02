@@ -13,6 +13,8 @@ import {
 import { useEffect, useState } from "react";
 
 import { CheckoutContent } from "@/components/checkout/CheckoutContent";
+import { FinalStatus } from "@/components/checkout/FinalStatus";
+import { PaymentSummary } from "@/components/checkout/PaymentSummary";
 import { ProductCard } from "@/components/product/ProductCard";
 import { Button } from "@/components/ui/button";
 import {
@@ -25,7 +27,11 @@ import {
 import { useTheme } from "@/contexts/ThemeContext";
 import { cn } from "@/lib/utils";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { selectProduct, setStep } from "@/store/slices/checkoutSlice";
+import {
+  clearPaymentResult,
+  selectProduct,
+  setStep,
+} from "@/store/slices/checkoutSlice";
 import { fetchProducts } from "@/store/slices/productsSlice";
 import type { Product, RoastLevel } from "@/types";
 
@@ -55,7 +61,7 @@ const TRUST_BADGES: TrustBadge[] = [
   {
     icon: ShieldCheck,
     title: "Secure Payments",
-    sub: "Wompi — encrypted & safe",
+    sub: "Encrypted and gateway-ready",
   },
   { icon: Truck, title: "Fast Delivery", sub: "1 – 3 business days" },
 ];
@@ -107,6 +113,8 @@ export function ProductPage() {
   const [activeFilter, setActiveFilter] = useState<FilterId>("all");
   const [search, setSearch] = useState("");
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
+  const isSummaryOpen = checkoutStep === "summary" && !!selectedProduct;
+  const isStatusOpen = checkoutStep === "status";
 
   useEffect(() => {
     if (status === "idle") dispatch(fetchProducts());
@@ -120,7 +128,17 @@ export function ProductPage() {
     }
   }
 
+  function handleSummaryOpenChange(nextOpen: boolean) {
+    if (nextOpen) {
+      return;
+    }
+
+    dispatch(setStep("checkout"));
+    setIsCheckoutOpen(true);
+  }
+
   function handleBuy(product: Product) {
+    dispatch(clearPaymentResult());
     dispatch(selectProduct(product));
     dispatch(setStep("checkout"));
     setIsCheckoutOpen(true);
@@ -163,6 +181,13 @@ export function ProductPage() {
           </div>
         </DialogContent>
       </Dialog>
+
+      <PaymentSummary
+        open={isSummaryOpen}
+        onOpenChange={handleSummaryOpenChange}
+      />
+
+      <FinalStatus open={isStatusOpen} />
 
       <div className="min-h-screen bg-background">
       {/* ══════════════════════════════════════════════
