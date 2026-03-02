@@ -11,10 +11,17 @@ import {
   Truck,
 } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 
+import { CheckoutContent } from "@/components/checkout/CheckoutContent";
 import { ProductCard } from "@/components/product/ProductCard";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { useTheme } from "@/contexts/ThemeContext";
 import { cn } from "@/lib/utils";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
@@ -91,23 +98,32 @@ function ProductCardSkeleton() {
 
 export function ProductPage() {
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
   const { theme, toggleTheme } = useTheme();
 
   const { items: products, status, error } = useAppSelector((s) => s.products);
+  const selectedProduct = useAppSelector((s) => s.checkout.selectedProduct);
+  const checkoutStep = useAppSelector((s) => s.checkout.step);
 
   const [activeFilter, setActiveFilter] = useState<FilterId>("all");
   const [search, setSearch] = useState("");
+  const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
 
   useEffect(() => {
     if (status === "idle") dispatch(fetchProducts());
   }, [status, dispatch]);
 
+  function handleCheckoutOpenChange(nextOpen: boolean) {
+    setIsCheckoutOpen(nextOpen);
+
+    if (!nextOpen && checkoutStep === "checkout") {
+      dispatch(setStep("product"));
+    }
+  }
+
   function handleBuy(product: Product) {
     dispatch(selectProduct(product));
     dispatch(setStep("checkout"));
-    console.log("[Step 2 ready] Selected product:", product.name);
-    navigate("/checkout");
+    setIsCheckoutOpen(true);
   }
 
   function handleHeroBuy(productId: string) {
@@ -129,7 +145,26 @@ export function ProductPage() {
   // ── Render ──────────────────────────────────────────────────────────────────
 
   return (
-    <div className="min-h-screen bg-background">
+    <>
+      <Dialog
+        open={isCheckoutOpen && !!selectedProduct}
+        onOpenChange={handleCheckoutOpenChange}
+      >
+        <DialogContent className="max-h-[90vh] max-w-5xl overflow-y-auto border-border/50 bg-background p-0">
+          <DialogHeader className="border-b border-border/40 pr-12">
+            <DialogTitle>Checkout</DialogTitle>
+            <DialogDescription>
+              Confirm your delivery details and payment without leaving the
+              catalog.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="p-4 sm:p-6">
+            <CheckoutContent onSubmitSuccess={() => setIsCheckoutOpen(false)} />
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      <div className="min-h-screen bg-background">
       {/* ══════════════════════════════════════════════
           HEADER
       ══════════════════════════════════════════════ */}
@@ -479,6 +514,7 @@ export function ProductPage() {
           <span>© 2024 Brews &amp; Beans. All rights reserved.</span>
         </div>
       </footer>
-    </div>
+      </div>
+    </>
   );
 }
