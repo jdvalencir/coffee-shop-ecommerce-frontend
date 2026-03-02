@@ -381,7 +381,7 @@ export function ProductPage() {
               {TRUST_BADGES.map(({ icon: Icon, title, sub }) => (
                 <div
                   key={title}
-                  className="flex items-center gap-3 bg-card px-4 py-3.5"
+                  className=" flex items-center gap-3 bg-card px-4 py-3.5"
                 >
                   <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-primary/10 dark:bg-primary/15">
                     <Icon className="h-4 w-4 text-primary" />
@@ -442,7 +442,7 @@ export function ProductPage() {
                 key={id}
                 onClick={() => setActiveFilter(id)}
                 className={cn(
-                  "flex-shrink-0 rounded-full px-3.5 py-1.5 text-xs font-medium transition-all duration-150",
+                  "cursor-pointer shrink-0 rounded-full px-3.5 py-1.5 text-xs font-medium transition-all duration-150",
                   activeFilter === id
                     ? "bg-primary text-primary-foreground shadow-sm"
                     : "bg-muted text-muted-foreground hover:bg-secondary hover:text-secondary-foreground",

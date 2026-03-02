@@ -1,24 +1,24 @@
-import { useEffect } from 'react';
 import {
   AlertTriangle,
   CheckCircle2,
   Loader2,
   RefreshCcw,
   ShieldAlert,
-} from 'lucide-react';
+} from "lucide-react";
+import { useEffect } from "react";
 
-import { useTransactionStatus } from '@/hooks/useTransactionStatus';
-import { Button } from '@/components/ui/button';
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
-import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { fetchProducts } from '@/store/slices/productsSlice';
-import { resetCheckout, setPaymentResult } from '@/store/slices/checkoutSlice';
+} from "@/components/ui/dialog";
+import { useTransactionStatus } from "@/hooks/useTransactionStatus";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { resetCheckout, setPaymentResult } from "@/store/slices/checkoutSlice";
+import { fetchProducts } from "@/store/slices/productsSlice";
 
 interface FinalStatusProps {
   open: boolean;
@@ -28,7 +28,7 @@ export function FinalStatus({ open }: FinalStatusProps) {
   const dispatch = useAppDispatch();
   const paymentResult = useAppSelector((state) => state.checkout.paymentResult);
   const shouldPoll =
-    paymentResult.status === 'pending' && Boolean(paymentResult.transactionId);
+    paymentResult.status === "pending" && Boolean(paymentResult.transactionId);
   const {
     status: polledStatus,
     message: polledMessage,
@@ -38,19 +38,19 @@ export function FinalStatus({ open }: FinalStatusProps) {
   } = useTransactionStatus(shouldPoll ? paymentResult.transactionId : null);
 
   useEffect(() => {
-    if (!shouldPoll || !polledStatus || polledStatus === 'pending') {
+    if (!shouldPoll || !polledStatus || polledStatus === "pending") {
       return;
     }
 
     dispatch(
       setPaymentResult({
-        outcome: polledStatus === 'approved' ? 'success' : 'error',
+        outcome: polledStatus === "approved" ? "success" : "error",
         status: polledStatus,
         transactionId: paymentResult.transactionId,
         message:
-          polledStatus === 'approved'
+          polledStatus === "approved"
             ? polledMessage
-            : polledMessage ?? 'La transacción no pudo ser aprobada.',
+            : (polledMessage ?? "La transacción no pudo ser aprobada."),
       }),
     );
   }, [
@@ -61,17 +61,20 @@ export function FinalStatus({ open }: FinalStatusProps) {
     shouldPoll,
   ]);
 
-  const resolvedStatus = shouldPoll ? polledStatus ?? 'pending' : paymentResult.status;
+  const resolvedStatus = shouldPoll
+    ? (polledStatus ?? "pending")
+    : paymentResult.status;
   const resolvedMessage = shouldPoll
-    ? pollingError ?? polledMessage ?? paymentResult.message
+    ? (pollingError ?? polledMessage ?? paymentResult.message)
     : paymentResult.message;
-  const isPendingView = shouldPoll && (isLoading || isPolling || resolvedStatus === 'pending');
-  const isSuccessView = resolvedStatus === 'approved';
+  const isPendingView =
+    shouldPoll && (isLoading || isPolling || resolvedStatus === "pending");
+  const isSuccessView = resolvedStatus === "approved";
   const isErrorView =
     !isPendingView &&
-    (resolvedStatus === 'declined' ||
-      resolvedStatus === 'error' ||
-      paymentResult.outcome === 'error');
+    (resolvedStatus === "declined" ||
+      resolvedStatus === "error" ||
+      paymentResult.outcome === "error");
 
   function handleBackToCatalog() {
     dispatch(resetCheckout());
@@ -119,7 +122,8 @@ export function FinalStatus({ open }: FinalStatusProps) {
                 </h2>
                 <p className="mt-2 text-sm leading-6 text-muted-foreground">
                   Tu transacción está pendiente. Estamos consultando el backend
-                  cada 3 segundos hasta que la pasarela devuelva el resultado final.
+                  cada 3 segundos hasta que la pasarela devuelva el resultado
+                  final.
                 </p>
                 {paymentResult.transactionId ? (
                   <p className="mt-4 rounded-full bg-muted px-4 py-2 text-xs font-medium text-muted-foreground">
@@ -138,7 +142,8 @@ export function FinalStatus({ open }: FinalStatusProps) {
                   Pago aprobado
                 </h2>
                 <p className="mt-2 text-sm leading-6 text-muted-foreground">
-                  Tu pedido fue confirmado correctamente y el inventario ya puede actualizarse.
+                  Tu pedido fue confirmado correctamente y el inventario ya
+                  puede actualizarse.
                 </p>
                 {paymentResult.transactionId ? (
                   <p className="mt-4 rounded-2xl border border-emerald-500/20 bg-emerald-500/5 px-4 py-3 text-sm font-medium text-foreground">
@@ -170,7 +175,7 @@ export function FinalStatus({ open }: FinalStatusProps) {
                 </h2>
                 <p className="mt-2 text-sm leading-6 text-muted-foreground">
                   {resolvedMessage ??
-                    'La transacción fue rechazada o no pudo confirmarse.'}
+                    "La transacción fue rechazada o no pudo confirmarse."}
                 </p>
                 {paymentResult.transactionId ? (
                   <p className="mt-4 rounded-full bg-muted px-4 py-2 text-xs font-medium text-muted-foreground">
