@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { useForm, type FieldErrors } from 'react-hook-form';
+import { useEffect, useMemo, useState } from 'react';
+import { useForm, useWatch, type FieldErrors } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Lock, Package } from 'lucide-react';
 
@@ -90,7 +90,51 @@ export function CheckoutContent({ onSubmitSuccess }: CheckoutContentProps) {
   const {
     handleSubmit,
     formState: { errors, isSubmitting },
+    control,
   } = form;
+  const watchedDelivery = useWatch({
+    control,
+    name: 'delivery',
+  });
+
+  const normalizedSavedDelivery = useMemo(
+    () => ({
+      fullName: savedDelivery?.fullName ?? '',
+      email: savedDelivery?.email ?? '',
+      phone: savedDelivery?.phone ?? '',
+      address: savedDelivery?.address ?? '',
+      city: savedDelivery?.city ?? '',
+      department: savedDelivery?.department ?? '',
+    }),
+    [savedDelivery],
+  );
+
+  useEffect(() => {
+    if (!watchedDelivery) {
+      return;
+    }
+
+    const hasAnyValue = Object.values(watchedDelivery).some((value) => value.trim() !== '');
+    if (!hasAnyValue && !savedDelivery) {
+      return;
+    }
+
+    const savedSnapshot = JSON.stringify(normalizedSavedDelivery);
+    const currentSnapshot = JSON.stringify(watchedDelivery);
+
+    if (currentSnapshot !== savedSnapshot) {
+      dispatch(
+        setDelivery({
+          fullName: watchedDelivery.fullName,
+          email: watchedDelivery.email,
+          phone: watchedDelivery.phone,
+          address: watchedDelivery.address,
+          city: watchedDelivery.city,
+          department: watchedDelivery.department,
+        }),
+      );
+    }
+  }, [dispatch, normalizedSavedDelivery, savedDelivery, watchedDelivery]);
 
   if (!selectedProduct) return null;
 
@@ -184,11 +228,11 @@ export function CheckoutContent({ onSubmitSuccess }: CheckoutContentProps) {
                 disabled={isSubmitting}
               >
                 <Lock className="h-4 w-4" />
-                {isSubmitting ? 'Processing…' : 'Confirm Payment'}
+                {isSubmitting ? 'Processing…' : 'Review Payment Summary'}
               </Button>
               <p className="mt-2 text-center text-xs text-muted-foreground">
-                By confirming you agree to proceed with a test transaction using
-                Wompi sandbox.
+                By confirming you agree to proceed with a secure test
+                transaction.
               </p>
             </div>
           </form>
@@ -230,19 +274,17 @@ export function CheckoutContent({ onSubmitSuccess }: CheckoutContentProps) {
           <Separator className="my-4" />
 
           <div className="space-y-2.5">
-            <PriceRow label="Subtotal" value={selectedProduct.price} />
+            <PriceRow label="Product amount" value={selectedProduct.price} />
             <PriceRow label="Base fee" value={BASE_FEE_COP} />
-            <PriceRow label="Delivery" value={DELIVERY_FEE_COP} />
+            <PriceRow label="Delivery Fee" value={DELIVERY_FEE_COP} />
             <Separator className="my-1" />
-            <PriceRow label="Total" value={total} bold />
+            <PriceRow label="Total amount" value={total} bold />
           </div>
 
           <div className="mt-4 flex items-center gap-2 rounded-lg bg-muted/50 px-3 py-2.5">
             <Lock className="h-3.5 w-3.5 flex-shrink-0 text-muted-foreground" />
             <p className="text-xs text-muted-foreground">
-              Secure payment powered by{' '}
-              <span className="font-semibold text-foreground">Wompi</span> -
-              sandbox mode
+              Secure payment processing in test mode
             </p>
           </div>
         </div>
