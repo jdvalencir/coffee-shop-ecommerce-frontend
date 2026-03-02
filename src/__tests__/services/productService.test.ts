@@ -1,4 +1,5 @@
 import { mockProducts } from '@/mock/products';
+import { CANONICAL_PRODUCT_IMAGE_URLS } from '@/lib/productImages';
 
 // mockAxiosGet is hoisted along with jest.mock because it is prefixed with "mock"
 const mockAxiosGet = jest.fn();
@@ -140,7 +141,7 @@ describe('productService', () => {
         description: 'A bright, complex light roast from the birthplace of coffee.',
         price: 65_000,
         stock: 15,
-        image: 'http://example.com/img.jpg',
+        image: CANONICAL_PRODUCT_IMAGE_URLS.etiopiaYirgacheffe,
         roastLevel: 'medium',
         origin: 'Origen no especificado',
         weight: 340,
